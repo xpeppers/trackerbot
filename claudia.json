@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "trackerbot-executor",
+    "name": "trackerbot",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "76fzbgf3p6",
+    "module": "bot"
+  }
+}
