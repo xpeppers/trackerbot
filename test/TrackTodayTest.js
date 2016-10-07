@@ -5,7 +5,6 @@ const RequestBuilder = require('./RequestBuilder')
 
 const tokenRepository = { findFromUsername: function(){} }
 
-
 describe('Track today command', function() {
   var bot = new TrackerBot(tokenRepository)
 
