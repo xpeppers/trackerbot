@@ -1,7 +1,5 @@
 const builder = require('claudia-bot-builder')
-const TokenRepository = require('./lib/TokenRepository')
-const tokenRepository = new TokenRepository()
-const TrackerBot = require('./lib/TrackerBot')
+const tokenRepository = require('./lib/TokenRepository')
+const trackerBot = require('./lib/TrackerBot')
 
-module.exports = builder(new TrackerBot(tokenRepository))
-
+module.exports = builder(trackerBot(tokenRepository))
