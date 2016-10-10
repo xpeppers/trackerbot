@@ -1,4 +1,6 @@
-(TODO)
+# Trackerbot
+
+[![Build Status](https://travis-ci.org/xpeppers/trackerbot.svg?branch=master)](https://travis-ci.org/xpeppers/trackerbot)
 
 ### Docker notes
 
@@ -12,5 +14,5 @@ $ docker run -itv $(pwd):/app --name tb trackerbot
 ```
 Run tests inside the container:
 ```
-$ ./node_modules/.bin/mocha
+$ npm run test
 ```
