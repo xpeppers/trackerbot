@@ -9,13 +9,12 @@ const ANY_USERNAME = 'username'
 const TOKEN = 'token'
 
 describe('Track today command', function() {
-  it('return', function() {
+  it('returns message ok on track today command', function() {
     var tokenRepositoryMock = sinon.mock(tokenRepository)
     tokenRepositoryMock.expects("findFromUsername").once().withArgs(ANY_USERNAME).returns(TOKEN)
 
     response = trackerBot(requestBuilder().withText("today").withUserName(ANY_USERNAME))
 
-    assert.equal('Ciao ' + ANY_USERNAME + '. Il tuo token è ' + TOKEN, response)
-    tokenRepositoryMock.verify()
+    assert.equal('Ciao ' + ANY_USERNAME + '. Ho tracciato la giornata di oggi', response)
   })
 })
