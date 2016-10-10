@@ -1,16 +1,21 @@
 const assert = require('assert')
 const sinon = require('sinon')
-const TrackerBot = require('../lib/TrackerBot')
 const requestBuilder = require('./RequestBuilder')
 
-const tokenRepository = { findFromUsername: function(){} }
+const trackerBot = require('../lib/TrackerBot')
+const tokenRepository = require('../lib/TokenRepository')
+
+const ANY_USERNAME = 'username'
+const TOKEN = 'token'
 
 describe('Track today command', function() {
-  var bot = new TrackerBot(tokenRepository)
-
   it('return', function() {
-    response = bot(requestBuilder().withText("today").withUserName("ettoredelprino"))
+    var tokenRepositoryMock = sinon.mock(tokenRepository)
+    tokenRepositoryMock.expects("findFromUsername").once().withArgs(ANY_USERNAME).returns(TOKEN)
 
-    assert.equal("Ciao ettoredelprino. Il tuo token è undefined", response)
+    response = trackerBot(requestBuilder().withText("today").withUserName(ANY_USERNAME))
+
+    assert.equal('Ciao ' + ANY_USERNAME + '. Il tuo token è ' + TOKEN, response)
+    tokenRepositoryMock.verify()
   })
 })
