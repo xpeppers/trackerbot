@@ -15,6 +15,6 @@ describe('Track today command', function() {
 
     response = trackerBot(requestBuilder().withText("today").withUserName(ANY_USERNAME))
 
-    assert.equal('Ciao ' + ANY_USERNAME + '. Ho tracciato la giornata di oggi', response)
+    assert.equal('Ciao ' + ANY_USERNAME + '. Ho tracciato la giornata di oggi.', response)
   })
 })
