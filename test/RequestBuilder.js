@@ -17,19 +17,16 @@ module.exports = function() {
     "type":"slack-slash-command"
   }
 
-  this.withText = function(text) {
+  request.withText = function(text) {
     request.originalRequest.text = text
     request.text = text
     return this
   }
 
-  this.withUserName = function(userName) {
+  request.withUserName = function(userName) {
     request.originalRequest.user_name = userName
     return this
   }
 
-  this.build = function() {
-    return request;
-  }
-
+  return request
 }
