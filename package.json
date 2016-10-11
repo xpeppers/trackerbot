@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/xpeppers/trackerbot#readme",
   "dependencies": {
-    "claudia-bot-builder": "^2.0.0"
+    "claudia-bot-builder": "^2.0.0",
+    "moment": "^2.15.1",
+    "toggl-api": "^1.0.0"
   },
   "devDependencies": {
     "claudia": "^2.1.0",

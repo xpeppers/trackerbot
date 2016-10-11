@@ -17,4 +17,10 @@ describe('Track today command', function() {
 
     assert.equal('Ciao ' + ANY_USERNAME + '. Ho tracciato la giornata di oggi.', response)
   })
+
+  it('returns empty message if function is not founded', function() {
+    response = trackerBot(requestBuilder().withText('no_command'))
+
+    assert.equal('', response)
+  })
 })
