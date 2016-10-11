@@ -1,3 +1,4 @@
+'use strict'
 const assert = require('assert')
 const sinon = require('sinon')
 const requestBuilder = require('./RequestBuilder')
@@ -13,9 +14,9 @@ describe('Bot', function() {
   it('returns message ok on track today command', function() {
     const userRepositoryMock = sinon.mock(userRepository)
     userRepositoryMock.expects("findFromUsername").once().withArgs(ANY_USERNAME).returns(USER_FROM_REPOSITORY)
-    request = requestBuilder().withText("today").withUserName(ANY_USERNAME)
+    const request = requestBuilder().withText("today").withUserName(ANY_USERNAME)
 
-    response = bot(request)
+    const response = bot(request)
 
     userRepositoryMock.verify()
     assert.equal('Ciao ' + ANY_USERNAME + '. Ho tracciato la giornata di oggi.', response)
@@ -23,7 +24,7 @@ describe('Bot', function() {
   })
 
   it('returns empty message if function is not founded', function() {
-    response = bot(requestBuilder().withText('no_command'))
+    const response = bot(requestBuilder().withText('no_command'))
 
     assert.equal('', response)
   })

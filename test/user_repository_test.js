@@ -1,3 +1,4 @@
+'use strict'
 const assert = require('assert')
 const userRepository = require('../lib/user_repository')
 
