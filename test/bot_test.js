@@ -3,17 +3,19 @@ const sinon = require('sinon')
 const requestBuilder = require('./RequestBuilder')
 
 const bot = require('../lib/bot')
-const tokenRepository = require('../lib/token_repository')
+const userRepository = require('../lib/user_repository')
 
 const ANY_USERNAME = 'username'
 const TOKEN = 'token'
+const USER_FROM_REPOSITORY = { token: TOKEN, username: ANY_USERNAME }
 
 describe('Bot', function() {
   it('returns message ok on track today command', function() {
-    var tokenRepositoryMock = sinon.mock(tokenRepository)
-    tokenRepositoryMock.expects("findFromUsername").once().withArgs(ANY_USERNAME).returns(TOKEN)
+    var userRepositoryMock = sinon.mock(userRepository)
+    userRepositoryMock.expects("findFromUsername").once().withArgs(ANY_USERNAME).returns(USER_FROM_REPOSITORY)
+    request = requestBuilder().withText("today").withUserName(ANY_USERNAME)
 
-    response = bot(requestBuilder().withText("today").withUserName(ANY_USERNAME))
+    response = bot(request)
 
     assert.equal('Ciao ' + ANY_USERNAME + '. Ho tracciato la giornata di oggi.', response)
   })
