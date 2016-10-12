@@ -1,3 +1,4 @@
+'use strict'
 module.exports = function() {
   var request =  {
     "sender":"SENDER_ID",
