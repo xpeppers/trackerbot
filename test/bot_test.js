@@ -10,8 +10,8 @@ const ANY_USERNAME = 'username'
 const TOKEN = 'token'
 const USER_FROM_REPOSITORY = { token: TOKEN, username: ANY_USERNAME }
 
-describe('Bot', function() {
-  it('returns message ok on track today command', function() {
+describe('Bot', () => {
+  it('returns message ok on track today command', () => {
     const userRepositoryMock = sinon.mock(userRepository)
     userRepositoryMock.expects("findFromUsername").once().withArgs(ANY_USERNAME).returns(USER_FROM_REPOSITORY)
     const request = requestBuilder().withText("today").withUserName(ANY_USERNAME)
@@ -23,7 +23,7 @@ describe('Bot', function() {
     userRepositoryMock.restore()
   })
 
-  it('returns empty message if function is not founded', function() {
+  it('returns empty message if function is not founded', () => {
     const response = bot(requestBuilder().withText('no_command'))
 
     assert.equal('', response)
