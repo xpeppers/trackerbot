@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "create": "claudia create --api-module bot --region us-east-1 --configure-slack-slash-command",
+    "create": "claudia create --api-module bot --region us-east-1 --configure-slack-slash-command --policies policies",
     "update": "claudia update",
     "test": "mocha"
   },
