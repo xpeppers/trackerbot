@@ -3,7 +3,7 @@ const assert = require('assert')
 const requestBuilder = require('./RequestBuilder')
 const bot = require('../lib/bot')
 
-const ANY_USERNAME = 'username'
+const ANY_USERNAME = 'ettoredelprino'
 
 describe('Bot', () => {
   it('returns message ok on track today command', () => {
