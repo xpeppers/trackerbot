@@ -1,7 +1,7 @@
 'use strict'
 const assert = require('assert')
 const requestBuilder = require('./RequestBuilder')
-const bot = require('../lib/bot')
+const bot = require('../lib')
 
 const USER_WITH_TEST_TOGGL_TOKEN = 'toggltoken'
 

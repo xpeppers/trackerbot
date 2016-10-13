@@ -1,4 +1,6 @@
+'use strict'
 const builder = require('claudia-bot-builder')
-const trackerBot = require('./lib/bot')
+const bot = require('./lib')
 
-module.exports = builder(trackerBot)
+module.exports = builder(bot)
+
