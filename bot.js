@@ -1,4 +1,9 @@
-const builder = require('claudia-bot-builder')
-const trackerBot = require('./lib/bot')
+const botBuilder = require('claudia-bot-builder');
+const TrackerBot = require('./lib/bot')
+const UserRepository = require('./user_repository')
+const TogglTracker = require('./tracker')
 
-module.exports = builder(trackerBot)
+module.exports = botBuilder(function (request) {
+  bot = new TrackerBot(new UserRepository(), new TogglTracker())
+  return bot.serve(request)
+})
