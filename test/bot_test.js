@@ -4,6 +4,7 @@ const requestBuilder = require('./RequestBuilder')
 const bot = require('../lib')
 
 const USER_WITH_TEST_TOGGL_TOKEN = 'toggltoken'
+const TEST_USER = 'testuser'
 
 describe('Bot', function() {
   this.timeout(5000)
@@ -30,5 +31,14 @@ describe('Bot', function() {
     const response = bot(requestBuilder().withText('no_command'))
 
     assert.equal('', response)
+  })
+
+  it('return project name for project command', () => {
+    const request = requestBuilder().withText('project').withUserName(TEST_USER)
+    const response = bot(request)
+
+    return response.then((res) => {
+      assert.equal('Ciao, attualmente sto tracciando su: test_project', res)
+    })
   })
 })
