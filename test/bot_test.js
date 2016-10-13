@@ -27,12 +27,6 @@ describe('Bot', function() {
     })
   })
 
-  it('returns empty message if function is not founded', () => {
-    const response = bot(requestBuilder().withText('no_command'))
-
-    assert.equal('', response)
-  })
-
   it('return project name for project command', () => {
     const request = requestBuilder().withText('project').withUserName(TEST_USER)
     const response = bot(request)
@@ -49,5 +43,13 @@ describe('Bot', function() {
     return response.then((res) => {
       assert.equal('Non ho trovato nessun user associato all\'username: not_existent_user', res)
     })
+  })
+
+  it('returns help for no arguments', () => {
+    const request = requestBuilder().withText('')
+    const response = bot(request)
+
+    assert.ok(response.includes('today - '))
+    assert.ok(response.includes('project - '))
   })
 })
