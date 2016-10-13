@@ -23,7 +23,7 @@ describe('Bot', function() {
     const response = bot(request)
 
     return response.then((res) => {
-      assert.equal('Non ho trovato nessun token associato all\'username: not_existent_user', res)
+      assert.equal('Non ho trovato nessun user associato all\'username: not_existent_user', res)
     })
   })
 
@@ -39,6 +39,15 @@ describe('Bot', function() {
 
     return response.then((res) => {
       assert.equal('Ciao, attualmente sto tracciando su: test_project', res)
+    })
+  })
+
+  it('return project name for project command', () => {
+    const request = requestBuilder().withText('project').withUserName('not_existent_user')
+    const response = bot(request)
+
+    return response.then((res) => {
+      assert.equal('Non ho trovato nessun user associato all\'username: not_existent_user', res)
     })
   })
 })
