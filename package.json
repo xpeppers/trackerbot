@@ -6,7 +6,10 @@
   "scripts": {
     "create": "claudia create --api-module bot --region us-east-1 --configure-slack-slash-command --policies policies",
     "update": "claudia update",
-    "test": "mocha"
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "lint": "xo --env=node --env=mocha",
+    "lint:fix": "xo --env=node --env=mocha --fix"
   },
   "repository": {
     "type": "git",
@@ -27,6 +30,14 @@
   "devDependencies": {
     "claudia": "^2.1.0",
     "mocha": "^3.1.0",
-    "sinon": "^1.17.6"
+    "sinon": "^1.17.6",
+    "xo": "^0.17.0"
+  },
+  "xo": {
+    "esnext": true,
+    "rules": {
+      "import/no-unresolved": 0,
+      "camelcase": 0
+    }
   }
 }
