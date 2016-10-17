@@ -4,6 +4,10 @@ const UserRepository = require('./user_repository')
 const TogglTracker = require('./tracker')
 
 module.exports = botBuilder(function (request) {
-  bot = new TrackerBot(new UserRepository(), new TogglTracker())
+  bot = new TrackerBot(
+    new UserRepository(),
+    new TogglTracker(new TogglApiFactory())
+  )
+
   return bot.serve(request)
 })
