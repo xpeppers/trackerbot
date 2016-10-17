@@ -6,7 +6,7 @@
   "scripts": {
     "create": "claudia create --api-module bot --region us-east-1 --configure-slack-slash-command --policies policies",
     "update": "claudia update",
-    "test": "mocha"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -25,8 +25,7 @@
     "toggl-api": "^1.0.0"
   },
   "devDependencies": {
-    "claudia": "^2.1.0",
-    "mocha": "^3.1.0",
-    "sinon": "^1.17.6"
+    "ava": "^0.16.0",
+    "claudia": "^2.1.0"
   }
 }
