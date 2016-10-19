@@ -42,6 +42,17 @@ test('return project name for project command', t => {
   });
 });
 
+test.skip('set default project for user', t => {
+  const request = requestBuilder().withText('project cdc').withUserName(TEST_USER);
+  const response = bot(request);
+
+  t.is('cdc', response)
+
+  return response.then(res => {
+    t.is('Ho settatto cdc come progetto di default', res);
+  });
+});
+
 test('returns help for no arguments', t => {
   const request = requestBuilder().withText('');
   const response = bot(request);

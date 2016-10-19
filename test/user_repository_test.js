@@ -17,3 +17,23 @@ test('returns error on not founded username', t => {
     t.is(undefined, user);
   });
 });
+
+test('save user', t => {
+  const user = new User('prova', 'project', 'token')
+  return userRepository.save(user)
+    .then(() => {
+      return userRepository.findFromUsername('prova')
+        .then(user => {
+          t.is('prova', user.username);
+          t.is('project', user.project);
+          t.is('token', user.token);
+        });
+    });
+});
+
+function User(username, project, token)
+{
+  this.username = username
+  this.project = project
+  this.token = token
+}
