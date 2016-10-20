@@ -2,17 +2,29 @@
 const assert = require('assert')
 const requestBuilder = require('./RequestBuilder')
 const sinon = require('sinon')
+const moment = require('moment')
 
 const TogglApi = require('toggl-api')
 const TrackerBot = require('../lib/bot')
-const TogglTracker = require('../lib/tracker')
+//const TogglTracker = require('../lib/tracker')
 
 const USER_USERNAME = 'ettoredelprino'
 const USER_TOGGL_TOKEN = 'toggleToken10238471'
 
+
+const proxyquire = require('proxyquire');
+
 describe('Bot', () => {
 
   it('returns message ok on track today command', () => {
+
+    const today = moment('2016-10-18')
+   	const TogglTracker = proxyquire('../lib/tracker', {
+			'moment': function() {
+				return today
+			}
+		})
+
     const togglApi = new TogglApi()
     const mockTogglApi = sinon.mock(togglApi)
     const bot = new TrackerBot(
@@ -27,7 +39,7 @@ describe('Bot', () => {
       duration: 14400,
       wid: 766453,
       billable: true,
-      start: '2016-10-19T09:00:00+02:00'
+      start: '2016-10-18T09:00:00+02:00'
     }
     const expectedAfternoonEntry = {
       pid: 8107914,
@@ -36,7 +48,7 @@ describe('Bot', () => {
       duration: 14400,
       wid: 766453,
       billable: true,
-      start: '2016-10-19T14:00:00+02:00'
+      start: '2016-10-18T14:00:00+02:00'
     }
 
     mockTogglApi.expects("createTimeEntry").once().withExactArgs(expectedMorningEntry)
