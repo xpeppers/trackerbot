@@ -17,20 +17,22 @@ ava('track today', t => {
       return Promise.resolve(TESTUSER)
     }
   }
-  const togglApiStub = function(config) {
-    this.createTimeEntry = function(entry, callback) {
-      callback(null, entry)
+  const trackerStub = function(token) {
+    return {
+      createTimeEntry: function(entry) {
+        return Promise.resolve({})
+      }
     }
   }
 
   momentStub['@global'] = true
   userRepositoryStub['@global'] = true
-  togglApiStub['@global'] = true
+  trackerStub['@global'] = true
 
   const bot = proxyquire('../lib', {
     'moment': momentStub,
     '../user_repository': userRepositoryStub,
-    'toggl-api': togglApiStub
+    '../tracker': trackerStub
   })
 
   const request = requestBuilder().withText('today').withUserName(TESTUSER_USERNAME);
