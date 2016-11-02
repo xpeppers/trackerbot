@@ -9,25 +9,12 @@ const TESTUSER_USERNAME = 'xpeppers.user'
 
 ava('track today', t => {
 
-	const expectedMorningEntry = {
-		pid: 8107914,
-		description: 'Phoenix',
-		created_with: 'TrackerBot',
-		duration: 14400,
-		billable: true,
-		start: '2016-10-20T09:00:00+02:00'
-	}
-	const expectedAfternoonEntry = {
-		pid: 8107914,
-		description: 'Phoenix',
-		created_with: 'TrackerBot',
-		duration: 14400,
-		billable: true,
-		start: '2016-10-20T14:00:00+02:00'
-	}
+	const expectedMorningEntry = entry(8107914, 'Phoenix', '2016-10-20T09:00:00+02:00')
+	const expectedAfternoonEntry = entry(8107914, 'Phoenix', '2016-10-20T14:00:00+02:00')
 
-	const bot = buildBotWithStubs(momentStub(), fakeUserRepository(), trackerStub(expectedMorningEntry, expectedAfternoonEntry))
+	const bot = buildBot('2016-10-20', expectedMorningEntry, expectedAfternoonEntry)
   const request = requestBuilder().withText('today').withUserName(TESTUSER_USERNAME)
+
   const response = bot(request)
 
   return response.then(res => {
@@ -36,7 +23,22 @@ ava('track today', t => {
 
 })
 
-function buildBotWithStubs(momentStub, userRepositoryStub, trackerStub) {
+function entry(pid, description, startTime) {
+  return {
+		pid: pid,
+		description: description,
+		created_with: 'TrackerBot',
+		duration: 14400,
+		billable: true,
+		start: startTime
+	}
+}
+
+function buildBot(date, expectedMorningEntry, expectedAfternoonEntry) {
+  const momentStub = getMomentStub(date)
+  const userRepositoryStub = getFakeUserRepository()
+  const trackerStub = getTrackerStub(expectedMorningEntry, expectedAfternoonEntry)
+
   momentStub['@global'] = true
   userRepositoryStub['@global'] = true
   trackerStub['@global'] = true
@@ -48,11 +50,11 @@ function buildBotWithStubs(momentStub, userRepositoryStub, trackerStub) {
   })
 }
 
-function momentStub() {
-  return function() { return require('moment')('2016-10-20') }
+function getMomentStub(date) {
+  return function() { return require('moment')(date) }
 }
 
-function trackerStub(expectedMorningEntry, expectedAfternoonEntry) {
+function getTrackerStub(expectedMorningEntry, expectedAfternoonEntry) {
   const tracker = require('../lib/tracker')('uselessToggleToken')
   const trackerMock = sinon.mock(tracker)
 
@@ -65,7 +67,7 @@ function trackerStub(expectedMorningEntry, expectedAfternoonEntry) {
 
 }
 
-function fakeUserRepository() {
+function getFakeUserRepository() {
   return {
     findFromUsername: function(username) {
 			const userFromRepository = { username: TESTUSER_USERNAME, project: 'phoenix', token: 'toggltoken1023jrwdfsd9v' }
