@@ -23,17 +23,6 @@ ava('track today', t => {
 
 })
 
-function entry(pid, description, startTime) {
-  return {
-		pid: pid,
-		description: description,
-		created_with: 'TrackerBot',
-		duration: 14400,
-		billable: true,
-		start: startTime
-	}
-}
-
 function buildBot(date, expectedMorningEntry, expectedAfternoonEntry) {
   const momentStub = getMomentStub(date)
   const userRepositoryStub = getFakeUserRepository()
@@ -70,9 +59,20 @@ function getTrackerStub(expectedMorningEntry, expectedAfternoonEntry) {
 function getFakeUserRepository() {
   return {
     findFromUsername: function(username) {
-			const userFromRepository = { username: TESTUSER_USERNAME, project: 'phoenix', token: 'toggltoken1023jrwdfsd9v' }
+			const userFromRepository = { username: TESTUSER_USERNAME, project_description: 'Phoenix', project_id: 8107914, token: 'toggltoken1023jrwdfsd9v' }
       return Promise.resolve(userFromRepository)
     }
   }
+}
+
+function entry(pid, description, startTime) {
+  return {
+		pid: pid,
+		description: description,
+		created_with: 'TrackerBot',
+		duration: 14400,
+		billable: true,
+		start: startTime
+	}
 }
 

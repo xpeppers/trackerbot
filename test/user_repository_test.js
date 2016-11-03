@@ -7,7 +7,8 @@ test('returns user object on given username', t => {
   .then(user => {
     t.is('test_token', user.token);
     t.is('testuser', user.username);
-    t.is('test_project', user.project);
+    t.is('123654', user.project_id);
+    t.is('Test Proj Description', user.project_description);
   });
 });
 
