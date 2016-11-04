@@ -1,14 +1,13 @@
 'use strict'
 
-const ava = require('ava')
+const test = require('ava');
 const requestBuilder = require('./helpers/RequestBuilder')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 
 const TESTUSER_USERNAME = 'xpeppers.user'
 
-ava('track today', t => {
-
+test('track today command', t => {
 	const expectedMorningEntry = entry(8107914, 'Phoenix', '2016-10-20T09:00:00+02:00')
 	const expectedAfternoonEntry = entry(8107914, 'Phoenix', '2016-10-20T14:00:00+02:00')
 
@@ -22,6 +21,17 @@ ava('track today', t => {
   })
 
 })
+
+test.skip('set default project for user', t => {
+  const request = requestBuilder().withText('project cdc').withUserName(TEST_USER);
+  const response = bot(request);
+
+  t.is('cdc', response)
+
+  return response.then(res => {
+    t.is('Ho settatto cdc come progetto di default', res);
+  });
+});
 
 function buildBot(date, expectedMorningEntry, expectedAfternoonEntry) {
   const momentStub = getMomentStub(date)

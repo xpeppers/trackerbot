@@ -12,7 +12,7 @@ test('returns user object on given username', t => {
   });
 });
 
-test('returns error on not founded username', t => {
+test('returns undefined on not founded username', t => {
   return userRepository.findFromUsername('not_existent_username')
   .then(user => {
     t.is(undefined, user);

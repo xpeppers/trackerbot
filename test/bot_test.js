@@ -6,15 +6,6 @@ const requestBuilder = require('./helpers/RequestBuilder');
 const USER_WITH_TEST_TOGGL_TOKEN = 'toggltoken';
 const TEST_USER = 'testuser';
 
-test.skip('returns message ok on track today command', t => {
- const request = requestBuilder().withText('today').withUserName(USER_WITH_TEST_TOGGL_TOKEN);
- const response = bot(request);
-
- return response.then(res => {
-   t.is('Ciao ' + USER_WITH_TEST_TOGGL_TOKEN + '. Ho tracciato la giornata di oggi.', res);
- });
-});
-
 test('returns error message if token is not found ', t => {
   const request = requestBuilder().withText('today').withUserName('not_existent_user');
   const response = bot(request);
@@ -29,7 +20,7 @@ test('return project name for project command', t => {
   const response = bot(request);
 
   return response.then(res => {
-    t.is('Ciao, attualmente sto tracciando su: test_project', res);
+    t.is('Ciao, attualmente sto tracciando su: Test Proj Description', res);
   });
 });
 
@@ -42,16 +33,6 @@ test('return project name for project command', t => {
   });
 });
 
-test.skip('set default project for user', t => {
-  const request = requestBuilder().withText('project cdc').withUserName(TEST_USER);
-  const response = bot(request);
-
-  t.is('cdc', response)
-
-  return response.then(res => {
-    t.is('Ho settatto cdc come progetto di default', res);
-  });
-});
 
 test('returns help for no arguments', t => {
   const request = requestBuilder().withText('');
