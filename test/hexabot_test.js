@@ -50,7 +50,7 @@ function buildBot(date, expectedMorningEntry, expectedAfternoonEntry) {
 }
 
 function getMomentStub(date) {
-  return function() { return require('moment')(date) }
+  return function() { return require('moment-timezone')(date) }
 }
 
 function getTrackerStub(expectedMorningEntry, expectedAfternoonEntry) {
