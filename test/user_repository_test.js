@@ -7,8 +7,8 @@ test('returns user object on given username', t => {
   .then(user => {
     t.is('test_token', user.token);
     t.is('testuser', user.username);
-    t.is('123654', user.project_id);
     t.is('Test Proj Description', user.project_description);
+    t.is('123654', user.project_id);
   });
 });
 
@@ -20,21 +20,23 @@ test('returns undefined on not founded username', t => {
 });
 
 test('save user', t => {
-  const user = new User('prova', 'project', 'token')
+  const user = new User('prova', 'token', 'Project', '123456')
   return userRepository.save(user)
     .then(() => {
       return userRepository.findFromUsername('prova')
         .then(user => {
           t.is('prova', user.username);
-          t.is('project', user.project);
           t.is('token', user.token);
+          t.is('Project', user.project_description);
+          t.is('123456', user.project_id);
         });
     });
 });
 
-function User(username, project, token)
+function User(username, token, project_description, project_id)
 {
   this.username = username
-  this.project = project
   this.token = token
+  this.project_description = project_description
+  this.project_id = project_id
 }
