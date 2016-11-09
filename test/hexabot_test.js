@@ -6,12 +6,13 @@ const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 
 const TESTUSER_USERNAME = 'xpeppers.user'
+const TODAY = '2016-10-20'
 
 test('track today command', t => {
-	const expectedMorningEntry = entry(8107914, 'Phoenix', '2016-10-20T09:00:00+02:00')
-	const expectedAfternoonEntry = entry(8107914, 'Phoenix', '2016-10-20T14:00:00+02:00')
+  const expectedMorningEntry = entry(8107914, 'Phoenix', TODAY+'T09:00:00+02:00')
+  const expectedAfternoonEntry = entry(8107914, 'Phoenix', TODAY+'T14:00:00+02:00')
 
-	const bot = buildBot('2016-10-20', expectedMorningEntry, expectedAfternoonEntry)
+  const bot = buildBot([expectedMorningEntry, expectedAfternoonEntry])
   const request = requestBuilder().withText('today').withUserName(TESTUSER_USERNAME)
 
   const response = bot(request)
@@ -22,21 +23,32 @@ test('track today command', t => {
 
 })
 
-test.skip('set default project for user', t => {
-  const request = requestBuilder().withText('project cdc').withUserName(TEST_USER);
-  const response = bot(request);
+test('proj command returns current project', t => {
+  const bot = buildBot()
+  const request = requestBuilder().withText('proj').withUserName(TESTUSER_USERNAME);
 
-  t.is('cdc', response)
+  const response = bot(request)
 
   return response.then(res => {
-    t.is('Ho settatto cdc come progetto di default', res);
+    t.is('Ciao, attualmente sto tracciando su Phoenix (8107914)', res);
+  });
+})
+
+test.skip('set project for user', t => {
+  const bot = buildBot()
+  const request = requestBuilder().withText('proj MPOS 9871234').withUserName(TESTUSER_USERNAME);
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Ho settatto MPOS (9871234) come progetto', res);
   });
 });
 
-function buildBot(date, expectedMorningEntry, expectedAfternoonEntry) {
+function buildBot(expectedEntriesTracked = [], date = TODAY) {
   const momentStub = getMomentStub(date)
   const userRepositoryStub = getFakeUserRepository()
-  const trackerStub = getTrackerStub(expectedMorningEntry, expectedAfternoonEntry)
+  const trackerStub = getTrackerStub(expectedEntriesTracked)
 
   momentStub['@global'] = true
   userRepositoryStub['@global'] = true
@@ -53,23 +65,29 @@ function getMomentStub(date) {
   return function() { return require('moment-timezone')(date) }
 }
 
-function getTrackerStub(expectedMorningEntry, expectedAfternoonEntry) {
+function getTrackerStub(expectedEntriesTracked) {
   const tracker = require('../lib/tracker')('uselessToggleToken')
   const trackerMock = sinon.mock(tracker)
 
-  trackerMock.expects("createTimeEntry").once().withArgs(expectedMorningEntry).returns(Promise.resolve())
-  trackerMock.expects("createTimeEntry").once().withArgs(expectedAfternoonEntry).returns(Promise.resolve())
+  expectedEntriesTracked.forEach(function(entry) {
+    trackerMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
+  })
 
   return function(token) {
     return tracker
   }
-
 }
 
 function getFakeUserRepository() {
   return {
     findFromUsername: function(username) {
-			const userFromRepository = { username: TESTUSER_USERNAME, project_description: 'Phoenix', project_id: 8107914, token: 'toggltoken1023jrwdfsd9v' }
+      const userFromRepository = {
+        username: TESTUSER_USERNAME,
+        project_description: 'Phoenix',
+        project_id: 8107914,
+        token: 'toggltoken1023jrwdfsd9v'
+      }
+
       return Promise.resolve(userFromRepository)
     }
   }
@@ -77,12 +95,12 @@ function getFakeUserRepository() {
 
 function entry(pid, description, startTime) {
   return {
-		pid: pid,
-		description: description,
-		created_with: 'TrackerBot',
-		duration: 14400,
-		billable: true,
-		start: startTime
-	}
+    pid: pid,
+    description: description,
+    created_with: 'TrackerBot',
+    duration: 14400,
+    billable: true,
+    start: startTime
+  }
 }
 
