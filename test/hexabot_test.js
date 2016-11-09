@@ -83,9 +83,11 @@ function getFakeUserRepository() {
     findFromUsername: function(username) {
       const userFromRepository = {
         username: TESTUSER_USERNAME,
-        project_description: 'Phoenix',
-        project_id: 8107914,
-        token: 'toggltoken1023jrwdfsd9v'
+        token: 'toggltoken1023jrwdfsd9v',
+        project: {
+          description: 'Phoenix',
+          id: 8107914,
+        }
       }
 
       return Promise.resolve(userFromRepository)

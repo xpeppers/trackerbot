@@ -7,8 +7,8 @@ test('returns user object on given username', t => {
   .then(user => {
     t.is('test_token', user.token);
     t.is('testuser', user.username);
-    t.is('Test Proj Description', user.project_description);
-    t.is('123654', user.project_id);
+    t.is('Test Proj Description', user.project.description);
+    t.is('123654', user.project.id);
   });
 });
 
@@ -27,8 +27,8 @@ test('save user', t => {
         .then(user => {
           t.is('prova', user.username);
           t.is('token', user.token);
-          t.is('Project', user.project_description);
-          t.is('123456', user.project_id);
+          t.is('Project', user.project.description);
+          t.is('123456', user.project.id);
         });
     });
 });

@@ -16,16 +16,16 @@ test('returns error message if token is not found ', t => {
 });
 
 test('return project name for project command', t => {
-  const request = requestBuilder().withText('project').withUserName(TEST_USER);
+  const request = requestBuilder().withText('proj').withUserName(TEST_USER);
   const response = bot(request);
 
   return response.then(res => {
-    t.is('Ciao, attualmente sto tracciando su: Test Proj Description', res);
+    t.is('Ciao, attualmente sto tracciando su Test Proj Description (123654)', res);
   });
 });
 
-test('return project name for project command', t => {
-  const request = requestBuilder().withText('project').withUserName('not_existent_user');
+test('return error message when proj requested on not existent user', t => {
+  const request = requestBuilder().withText('proj').withUserName('not_existent_user');
   const response = bot(request);
 
   return response.then(res => {
@@ -39,5 +39,5 @@ test('returns help for no arguments', t => {
   const response = bot(request);
 
   t.truthy(response.includes('today - '));
-  t.truthy(response.includes('project - '));
+  t.truthy(response.includes('proj - '));
 });
