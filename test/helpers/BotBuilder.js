@@ -21,17 +21,17 @@ function BotBuilder() {
 
   this.build = function() {
     const momentStub = getMomentStub(this.today)
-    const trackerStub = getTrackerStub(this.expectedEntriesTracked)
-    const userRepositoryStub = getFakeUserRepository()
+    const trackerMock = getTrackerMock(this.expectedEntriesTracked)
+    const userRepositoryMock = getUserRepositoryMock()
 
     momentStub['@global'] = true
-    trackerStub['@global'] = true
-    userRepositoryStub['@global'] = true
+    trackerMock['@global'] = true
+    userRepositoryMock['@global'] = true
 
     return proxyquire('../../lib', {
       'moment': momentStub,
-      '../tracker': trackerStub,
-      '../user_repository': userRepositoryStub,
+      '../tracker': trackerMock,
+      '../user_repository': userRepositoryMock,
     })
   }
 }
@@ -40,7 +40,7 @@ function getMomentStub(date) {
   return function() { return require('moment-timezone')(date) }
 }
 
-function getTrackerStub(expectedEntriesTracked) {
+function getTrackerMock(expectedEntriesTracked) {
   const tracker = require('../../lib/tracker')('uselessToggleToken')
   const trackerMock = sinon.mock(tracker)
 
@@ -53,20 +53,23 @@ function getTrackerStub(expectedEntriesTracked) {
   }
 }
 
-function getFakeUserRepository() {
-  return {
-    findFromUsername: function(username) {
-      const userFromRepository = {
-        username: 'xpeppers.user',
-        token: 'toggltoken1023jrwdfsd9v',
-        project: {
-          description: 'Phoenix',
-          id: 8107914,
-        }
-      }
+function getUserRepositoryMock() {
+  const repository = { findFromUsername: function() {} }
+  const repositoryMock = sinon.mock(repository)
 
-      return Promise.resolve(userFromRepository)
+  const userFromRepository = {
+    username: 'xpeppers.user',
+    token: 'toggltoken1023jrwdfsd9v',
+    project: {
+      description: 'Phoenix',
+      id: 8107914,
     }
   }
-}
 
+  repositoryMock
+    .expects('findFromUsername')
+    .withArgs('xpeppers.user')
+    .returns(Promise.resolve(userFromRepository))
+
+  return repository
+}
