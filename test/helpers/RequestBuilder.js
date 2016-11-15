@@ -24,7 +24,7 @@ module.exports = function() {
     return this
   }
 
-  request.withUserName = function(userName) {
+  request.withUsername = function(userName) {
     request.originalRequest.user_name = userName
     return this
   }

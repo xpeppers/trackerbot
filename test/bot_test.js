@@ -7,7 +7,7 @@ const USER_WITH_TEST_TOGGL_TOKEN = 'toggltoken';
 const TEST_USER = 'testuser';
 
 test('returns error message if token is not found ', t => {
-  const request = requestBuilder().withText('today').withUserName('not_existent_user');
+  const request = requestBuilder().withText('today').withUsername('not_existent_user');
   const response = bot(request);
 
   return response.then(res => {
@@ -16,7 +16,7 @@ test('returns error message if token is not found ', t => {
 });
 
 test('return project name for project command', t => {
-  const request = requestBuilder().withText('proj').withUserName(TEST_USER);
+  const request = requestBuilder().withText('proj').withUsername(TEST_USER);
   const response = bot(request);
 
   return response.then(res => {
@@ -25,7 +25,7 @@ test('return project name for project command', t => {
 });
 
 test('return error message when proj requested on not existent user', t => {
-  const request = requestBuilder().withText('proj').withUserName('not_existent_user');
+  const request = requestBuilder().withText('proj').withUsername('not_existent_user');
   const response = bot(request);
 
   return response.then(res => {
