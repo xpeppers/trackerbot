@@ -3,7 +3,7 @@
 const sinon = require('sinon')
 const proxyquire = require('proxyquire')
 
-module.exports = function() { return new BotBuilder() }
+module.exports = BotBuilder
 
 function BotBuilder() {
   this.today = '2016-11-15'
@@ -19,57 +19,64 @@ function BotBuilder() {
     return this
   }
 
-  this.build = function() {
-    const momentStub = getMomentStub(this.today)
-    const trackerMock = getTrackerMock(this.expectedEntriesTracked)
-    const userRepositoryMock = getUserRepositoryMock()
+  this.verifyMocksExpectations = function() {
+    this.trackerMock.verify()
+    this.userRepositoryMock.verify()
+  }
 
-    momentStub['@global'] = true
-    trackerMock['@global'] = true
-    userRepositoryMock['@global'] = true
+  this.build = function() {
+    const moment = getMomentStub(this.today)
+    this.buildUserRepositoryMocks()
+    this.buildTrackerMocks()
+
+    moment['@global'] = true
+    this.userRepositoryStub['@global'] = true
+    this.trackerStub['@global'] = true
 
     return proxyquire('../../lib', {
-      'moment': momentStub,
-      '../tracker': trackerMock,
-      '../user_repository': userRepositoryMock,
+      'moment': moment,
+      '../user_repository': this.userRepositoryStub,
+      '../tracker': this.trackerStub,
     })
   }
-}
 
-function getMomentStub(date) {
-  return function() { return require('moment-timezone')(date) }
-}
+  this.buildTrackerMocks = function() {
+    const trackerPrototype = require('../../lib/tracker')('uselessToggleToken')
+    this.trackerMock = sinon.mock(trackerPrototype)
 
-function getTrackerMock(expectedEntriesTracked) {
-  const tracker = require('../../lib/tracker')('uselessToggleToken')
-  const trackerMock = sinon.mock(tracker)
+    this.expectedEntriesTracked.forEach(function(entry) {
+      this.trackerMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
+    }, this)
 
-  expectedEntriesTracked.forEach(function(entry) {
-    trackerMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
-  })
-
-  return function(token) {
-    return tracker
-  }
-}
-
-function getUserRepositoryMock() {
-  const repository = { findFromUsername: function() {} }
-  const repositoryMock = sinon.mock(repository)
-
-  const userFromRepository = {
-    username: 'xpeppers.user',
-    token: 'toggltoken1023jrwdfsd9v',
-    project: {
-      description: 'Phoenix',
-      id: 8107914,
+    this.trackerStub = function(token) {
+      return trackerPrototype
     }
   }
 
-  repositoryMock
-    .expects('findFromUsername')
-    .withArgs('xpeppers.user')
-    .returns(Promise.resolve(userFromRepository))
+  this.buildUserRepositoryMocks = function() {
+    this.userRepositoryStub = { findFromUsername: function() {} }
+    this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
-  return repository
+    const userFromRepository = {
+      username: 'xpeppers.user',
+      token: 'toggltoken1023jrwdfsd9v',
+      project: {
+        description: 'Phoenix',
+        id: 8107914,
+      }
+    }
+
+    this.userRepositoryMock
+      .expects('findFromUsername')
+      .withArgs('xpeppers.user')
+      .returns(Promise.resolve(userFromRepository))
+  }
+
+  function getMomentStub(date) {
+    return function() { return require('moment-timezone')(date) }
+  }
+
+  function getUserRepositoryMock() {
+  }
+
 }
