@@ -13,6 +13,16 @@ test('returns user object on given username', t => {
   });
 });
 
+test('find user without a set project', t => {
+  return userRepository.findFromUsername('unemployed')
+  .then(user => {
+    t.is('unemployed', user.username);
+    t.is('3g9857463h9495', user.token);
+    t.is(undefined, user.project.description);
+    t.is(undefined, user.project.id);
+  });
+});
+
 test('returns undefined on not founded username', t => {
   return userRepository.findFromUsername('not_existent_username')
   .then(user => {
@@ -21,7 +31,7 @@ test('returns undefined on not founded username', t => {
 });
 
 test('save user', t => {
-  const user = new User('prova', 'token', '123456', 'Project')
+  const user = new User('prova', 'token', 123456, 'Project')
   return userRepository.save(user)
     .then(() => {
       return userRepository.findFromUsername('prova')

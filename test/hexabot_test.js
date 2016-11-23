@@ -1,6 +1,6 @@
 'use strict'
 
-const test = require('ava');
+const test = require('ava')
 const requestBuilder = require('./helpers/RequestBuilder')
 const BotBuilder = require('./helpers/BotBuilder')
 

@@ -58,7 +58,6 @@ function BotBuilder() {
     this.userRepositoryStub = { findFromUsername: function() {} }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
-    
     const userFromRepository = new User(
       'xpeppers.user',
       'toggltoken1023jrwdfsd9v',
