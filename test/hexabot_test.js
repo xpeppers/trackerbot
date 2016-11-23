@@ -37,7 +37,26 @@ test('proj command returns current project', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ciao, attualmente sto tracciando su Phoenix (8107914)', res);
+    t.is('Ciao, attualmente sto tracciando su Phoenix (8107914)', res)
+    botBuilder.verifyMocksExpectations()
+  })
+})
+
+test.skip('set token for user', t => {
+  const newToken = '129nvwer94emvt9mu349'
+  const request = requestBuilder()
+    .withUsername(TESTUSER_USERNAME)
+    .withText('token ' + newToken)
+  const botBuilder = new BotBuilder()
+  const expectedSavedUser = new User(TESTUSER_USERNAME, newToken, undefined, undefined)
+  const bot = botBuilder
+    .withExpectedSavedUser([expectedSavedUser])
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Ho settatto MPOS (9871234) come progetto', res)
     botBuilder.verifyMocksExpectations()
   })
 })
@@ -45,16 +64,16 @@ test('proj command returns current project', t => {
 test.skip('set project for user', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER_USERNAME)
-    .withText('proj MPOS 9871234')
+    .withText('proj 9871234 Corte dei Conti')
   const botBuilder = new BotBuilder()
   const bot = botBuilder
-    .withExpectedSavedUser()
+    .withExpectedSavedUser([expectedSavedUser])
     .build()
 
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ho settatto MPOS (9871234) come progetto', res);
+    t.is('Ho settatto MPOS (9871234) come progetto', res)
     botBuilder.verifyMocksExpectations()
   })
 })
