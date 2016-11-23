@@ -1,7 +1,7 @@
 'use strict';
 const test = require('ava');
 const userRepository = require('../lib/user_repository');
-const User = require('../lib/User');
+const User = require('../lib/user');
 
 test('returns user object on given username', t => {
   return userRepository.findFromUsername('testuser')

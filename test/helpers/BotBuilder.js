@@ -9,9 +9,15 @@ module.exports = BotBuilder
 function BotBuilder() {
   this.today = '2016-11-15'
   this.expectedEntriesTracked = []
+  this.expectedSavedUsers = []
 
   this.withExpectedEntryTracked = function(expected) {
     this.expectedEntriesTracked = expected
+    return this
+  }
+
+  this.withExpectedSavedUsers = function(expected) {
+    this.expectedSavedUsers = expected
     return this
   }
 
@@ -55,7 +61,7 @@ function BotBuilder() {
   }
 
   this.buildUserRepositoryMocks = function() {
-    this.userRepositoryStub = { findFromUsername: function() {} }
+    this.userRepositoryStub = { findFromUsername: function() {}, save: function() {} }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
     const userFromRepository = new User(
@@ -67,15 +73,18 @@ function BotBuilder() {
 
     this.userRepositoryMock
       .expects('findFromUsername')
+      .atLeast(0)
       .withArgs('xpeppers.user')
       .returns(Promise.resolve(userFromRepository))
+
+    this.expectedSavedUsers.forEach(function(user) {
+      this.userRepositoryMock.expects("save").once().withArgs(user).returns(Promise.resolve())
+    }, this)
+
   }
 
   function getMomentStub(date) {
     return function() { return require('moment-timezone')(date) }
-  }
-
-  function getUserRepositoryMock() {
   }
 
 }
