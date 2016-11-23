@@ -2,6 +2,7 @@
 
 const sinon = require('sinon')
 const proxyquire = require('proxyquire')
+const User = require('../../lib/user')
 
 module.exports = BotBuilder
 
@@ -57,14 +58,13 @@ function BotBuilder() {
     this.userRepositoryStub = { findFromUsername: function() {} }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
-    const userFromRepository = {
-      username: 'xpeppers.user',
-      token: 'toggltoken1023jrwdfsd9v',
-      project: {
-        description: 'Phoenix',
-        id: 8107914,
-      }
-    }
+    
+    const userFromRepository = new User(
+      'xpeppers.user',
+      'toggltoken1023jrwdfsd9v',
+      8107914,
+      'Phoenix'
+    )
 
     this.userRepositoryMock
       .expects('findFromUsername')

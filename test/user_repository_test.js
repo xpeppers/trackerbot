@@ -1,6 +1,7 @@
 'use strict';
 const test = require('ava');
 const userRepository = require('../lib/user_repository');
+const User = require('../lib/User');
 
 test('returns user object on given username', t => {
   return userRepository.findFromUsername('testuser')
@@ -8,7 +9,7 @@ test('returns user object on given username', t => {
     t.is('test_token', user.token);
     t.is('testuser', user.username);
     t.is('Test Proj Description', user.project.description);
-    t.is('123654', user.project.id);
+    t.is(123654, user.project.id);
   });
 });
 
@@ -20,7 +21,7 @@ test('returns undefined on not founded username', t => {
 });
 
 test('save user', t => {
-  const user = new User('prova', 'token', 'Project', '123456')
+  const user = new User('prova', 'token', '123456', 'Project')
   return userRepository.save(user)
     .then(() => {
       return userRepository.findFromUsername('prova')
@@ -28,15 +29,8 @@ test('save user', t => {
           t.is('prova', user.username);
           t.is('token', user.token);
           t.is('Project', user.project.description);
-          t.is('123456', user.project.id);
+          t.is(123456, user.project.id);
         });
     });
 });
 
-function User(username, token, project_description, project_id)
-{
-  this.username = username
-  this.token = token
-  this.project_description = project_description
-  this.project_id = project_id
-}
