@@ -83,6 +83,25 @@ test('set token for user', t => {
   })
 })
 
+test('set token for not existing user', t => {
+  const newToken = '129nvwer94emvt9mu367'
+  const request = requestBuilder()
+    .withUsername(NOT_EXISTING_USERNAME)
+    .withText('token ' + newToken)
+  const botBuilder = new BotBuilder()
+  const expectedSavedUser = new User(NOT_EXISTING_USERNAME, newToken, undefined, undefined)
+  const bot = botBuilder
+    .withExpectedSavedUsers([expectedSavedUser])
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Ottimo, ora sono in grado di tracciare per te', res)
+    botBuilder.verifyMocksExpectations()
+  })
+})
+
 test.skip('set project for user', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
