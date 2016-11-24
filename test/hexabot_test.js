@@ -14,12 +14,8 @@ const TESTUSER = new User(
   'Phoenix'
 )
 
-var testableBotBuilder
-test.beforeEach(t => {
-  testableBotBuilder = new TestableBotBuilder()
-})
-
 test('track today command', t => {
+  const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('today')
@@ -39,6 +35,7 @@ test('track today command', t => {
 })
 
 test('track today command with not existing user', t => {
+  const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
     .withUsername(NOT_EXISTING_USERNAME)
     .withText('today')
@@ -52,7 +49,16 @@ test('track today command with not existing user', t => {
   })
 })
 
+test.skip('track today for an existing user without set project', t => {
+	//...
+	return response.then(res => {
+    t.is('Ciao ' + TESTUSER.username + '. Non so su che progetto tracciare. Usa il comando proj.', res)
+		testableBotBuilder.verifyMocksExpectations()
+	})
+})
+
 test('proj command returns current project', t => {
+  const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('proj')
@@ -67,6 +73,7 @@ test('proj command returns current project', t => {
 })
 
 test('set token for user', t => {
+  const testableBotBuilder = new TestableBotBuilder()
   const newToken = '129nvwer94emvt9mu349'
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
@@ -85,6 +92,7 @@ test('set token for user', t => {
 })
 
 test('set token for not existing user', t => {
+  const testableBotBuilder = new TestableBotBuilder()
   const newToken = '129nvwer94emvt9mu367'
   const request = requestBuilder()
     .withUsername(NOT_EXISTING_USERNAME)
@@ -102,20 +110,22 @@ test('set token for not existing user', t => {
   })
 })
 
-test.skip('set project for user', t => {
-  const request = requestBuilder()
-    .withUsername(TESTUSER.username)
-    .withText('proj 9871234 Corte dei Conti')
-  const bot = testableBotBuilder
-    .withExpectedSavedUsers([expectedSavedUser])
-    .build()
+test.skip('set project for an existing user', t => {
+  const testableBotBuilder = new TestableBotBuilder()
+	const request = requestBuilder()
+		.withUsername(TESTUSER.username)
+		.withText('proj 9871234 Corte dei Conti')
+  const expectedSavedUser = new User(TESTUSER.username, TESTUSER.token, 9871234, 'Corte dei Conti')
+	const bot = testableBotBuilder
+		.withExpectedSavedUsers([expectedSavedUser])
+		.build()
 
-  const response = bot(request)
+	const response = bot(request)
 
-  return response.then(res => {
-    t.is('Ho settatto MPOS (9871234) come progetto', res)
-    testableBotBuilder.verifyMocksExpectations()
-  })
+	return response.then(res => {
+		t.is('Ho impostato Corte dei Conti (9871234) come progetto', res)
+		testableBotBuilder.verifyMocksExpectations()
+	})
 })
 
 function entry(pid, description, startTime) {
