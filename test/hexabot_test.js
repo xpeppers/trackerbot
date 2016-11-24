@@ -6,6 +6,7 @@ const BotBuilder = require('./helpers/BotBuilder')
 const User = require('../lib/user')
 
 const TODAY = '2016-10-20'
+const NOT_EXISTING_USERNAME = 'not.existing.username'
 const TESTUSER = new User(
   'xpeppers.user',
   'toggltoken1023jrwdfsd9v',
@@ -29,6 +30,21 @@ test('track today command', t => {
 
   return response.then(res => {
     t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di oggi.', res)
+    botBuilder.verifyMocksExpectations()
+  })
+})
+
+test('track today command with not existing user', t => {
+  const request = requestBuilder()
+    .withUsername(NOT_EXISTING_USERNAME)
+    .withText('today')
+  const botBuilder = new BotBuilder()
+  const bot = botBuilder.build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Non ho trovato nessun user associato all\'username: not.existing.username', res)
     botBuilder.verifyMocksExpectations()
   })
 })

@@ -77,6 +77,11 @@ function BotBuilder() {
       .withArgs('xpeppers.user')
       .returns(Promise.resolve(userFromRepository))
 
+    this.userRepositoryMock
+      .expects('findFromUsername')
+      .atLeast(0)
+      .returns(Promise.resolve(undefined))
+
     this.expectedSavedUsers.forEach(function(user) {
       this.userRepositoryMock.expects("save").once().withArgs(user).returns(Promise.resolve())
     }, this)
