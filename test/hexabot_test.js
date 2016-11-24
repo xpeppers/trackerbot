@@ -2,7 +2,7 @@
 
 const test = require('ava')
 const requestBuilder = require('./helpers/request_builder')
-const BotBuilder = require('./helpers/bot_builder')
+const TestableBotBuilder = require('./helpers/testable_bot_builder')
 const User = require('../lib/user')
 
 const TODAY = '2016-10-20'
@@ -14,14 +14,18 @@ const TESTUSER = new User(
   'Phoenix'
 )
 
+var testableBotBuilder
+test.beforeEach(t => {
+  testableBotBuilder = new TestableBotBuilder()
+})
+
 test('track today command', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('today')
   const expectedMorningEntry = entry(8107914, 'Phoenix', TODAY+'T09:00:00+02:00')
   const expectedAfternoonEntry = entry(8107914, 'Phoenix', TODAY+'T14:00:00+02:00')
-  const botBuilder = new BotBuilder()
-  const bot = botBuilder
+  const bot = testableBotBuilder
     .withTodayDate(TODAY)
     .withExpectedEntryTracked([expectedMorningEntry, expectedAfternoonEntry])
     .build()
@@ -30,7 +34,7 @@ test('track today command', t => {
 
   return response.then(res => {
     t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di oggi.', res)
-    botBuilder.verifyMocksExpectations()
+    testableBotBuilder.verifyMocksExpectations()
   })
 })
 
@@ -38,14 +42,13 @@ test('track today command with not existing user', t => {
   const request = requestBuilder()
     .withUsername(NOT_EXISTING_USERNAME)
     .withText('today')
-  const botBuilder = new BotBuilder()
-  const bot = botBuilder.build()
+  const bot = testableBotBuilder.build()
 
   const response = bot(request)
 
   return response.then(res => {
     t.is('Non ho trovato nessun user associato all\'username: not.existing.username', res)
-    botBuilder.verifyMocksExpectations()
+    testableBotBuilder.verifyMocksExpectations()
   })
 })
 
@@ -53,14 +56,13 @@ test('proj command returns current project', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('proj')
-  const botBuilder = new BotBuilder()
-  const bot = botBuilder.build()
+  const bot = testableBotBuilder.build()
 
   const response = bot(request)
 
   return response.then(res => {
     t.is('Ciao, attualmente sto tracciando su Phoenix (8107914)', res)
-    botBuilder.verifyMocksExpectations()
+    testableBotBuilder.verifyMocksExpectations()
   })
 })
 
@@ -69,9 +71,8 @@ test('set token for user', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('token ' + newToken)
-  const botBuilder = new BotBuilder()
   const expectedSavedUser = new User(TESTUSER.username, newToken, TESTUSER.project.id, TESTUSER.project.description)
-  const bot = botBuilder
+  const bot = testableBotBuilder
     .withExpectedSavedUsers([expectedSavedUser])
     .build()
 
@@ -79,7 +80,7 @@ test('set token for user', t => {
 
   return response.then(res => {
     t.is('Ottimo, ora sono in grado di tracciare per te', res)
-    botBuilder.verifyMocksExpectations()
+    testableBotBuilder.verifyMocksExpectations()
   })
 })
 
@@ -88,9 +89,8 @@ test('set token for not existing user', t => {
   const request = requestBuilder()
     .withUsername(NOT_EXISTING_USERNAME)
     .withText('token ' + newToken)
-  const botBuilder = new BotBuilder()
   const expectedSavedUser = new User(NOT_EXISTING_USERNAME, newToken, undefined, undefined)
-  const bot = botBuilder
+  const bot = testableBotBuilder
     .withExpectedSavedUsers([expectedSavedUser])
     .build()
 
@@ -98,7 +98,7 @@ test('set token for not existing user', t => {
 
   return response.then(res => {
     t.is('Ottimo, ora sono in grado di tracciare per te', res)
-    botBuilder.verifyMocksExpectations()
+    testableBotBuilder.verifyMocksExpectations()
   })
 })
 
@@ -106,8 +106,7 @@ test.skip('set project for user', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('proj 9871234 Corte dei Conti')
-  const botBuilder = new BotBuilder()
-  const bot = botBuilder
+  const bot = testableBotBuilder
     .withExpectedSavedUsers([expectedSavedUser])
     .build()
 
@@ -115,7 +114,7 @@ test.skip('set project for user', t => {
 
   return response.then(res => {
     t.is('Ho settatto MPOS (9871234) come progetto', res)
-    botBuilder.verifyMocksExpectations()
+    testableBotBuilder.verifyMocksExpectations()
   })
 })
 

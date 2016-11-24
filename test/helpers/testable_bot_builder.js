@@ -4,9 +4,7 @@ const sinon = require('sinon')
 const proxyquire = require('proxyquire')
 const User = require('../../lib/user')
 
-module.exports = BotBuilder
-
-function BotBuilder() {
+module.exports = function() {
   this.today = '2016-11-15'
   this.expectedEntriesTracked = []
   this.expectedSavedUsers = []
