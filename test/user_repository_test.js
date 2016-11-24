@@ -44,3 +44,17 @@ test('save user', t => {
     });
 });
 
+test('save user with undefined project', t => {
+  const user = new User('userWithoutProject', 'token')
+  return userRepository.save(user)
+    .then(() => {
+      return userRepository.findFromUsername('userWithoutProject')
+        .then(user => {
+          t.is('userWithoutProject', user.username);
+          t.is('token', user.token);
+          t.is(undefined, user.project.description);
+          t.is(undefined, user.project.id);
+        });
+    });
+});
+
