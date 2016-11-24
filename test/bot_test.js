@@ -1,7 +1,7 @@
 'use strict';
 const test = require('ava');
 const bot = require('../lib');
-const requestBuilder = require('./helpers/RequestBuilder');
+const requestBuilder = require('./helpers/request_builder');
 
 const USER_WITH_TEST_TOGGL_TOKEN = 'toggltoken';
 const TEST_USER = 'testuser';

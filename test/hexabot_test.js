@@ -1,8 +1,8 @@
 'use strict'
 
 const test = require('ava')
-const requestBuilder = require('./helpers/RequestBuilder')
-const BotBuilder = require('./helpers/BotBuilder')
+const requestBuilder = require('./helpers/request_builder')
+const BotBuilder = require('./helpers/bot_builder')
 const User = require('../lib/user')
 
 const TODAY = '2016-10-20'
