@@ -11,7 +11,7 @@ module.exports = function() {
       "channel_name":"directmessage",
       "user_id":"SENDER_ID",
       "user_name":"ettoredelprino",
-      "command":"/track",
+      "command":"/t",
       "text":"prova",
       "response_url":"https://hooks.slack.com/commands/T024J9QH0/88688115858/poPJLtcJvydwpzahL9hankv7"
     },
