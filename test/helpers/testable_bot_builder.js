@@ -62,18 +62,29 @@ module.exports = function() {
     this.userRepositoryStub = { findFromUsername: function() {}, save: function() {} }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
+    // TODO put a foreach with users here!
     const userFromRepository = new User(
       'xpeppers.user',
       'toggltoken1023jrwdfsd9v',
       8107914,
       'Phoenix'
     )
+    const userWithoutSetProject = new User(
+      'unemployed.username',
+      'toggltoken1023jrwdfsd9v'
+    )
 
     this.userRepositoryMock
       .expects('findFromUsername')
       .atLeast(0)
-      .withArgs('xpeppers.user')
+      .withArgs(userFromRepository.username)
       .returns(Promise.resolve(userFromRepository))
+
+    this.userRepositoryMock
+      .expects('findFromUsername')
+      .atLeast(0)
+      .withArgs(userWithoutSetProject.username)
+      .returns(Promise.resolve(userWithoutSetProject))
 
     this.userRepositoryMock
       .expects('findFromUsername')
@@ -81,7 +92,10 @@ module.exports = function() {
       .returns(Promise.resolve(undefined))
 
     this.expectedSavedUsers.forEach(function(user) {
-      this.userRepositoryMock.expects("save").once().withArgs(user).returns(Promise.resolve())
+      this.userRepositoryMock
+        .expects("save").once()
+        .withArgs(user)
+        .returns(Promise.resolve())
     }, this)
 
   }

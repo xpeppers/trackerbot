@@ -7,6 +7,7 @@ const User = require('../lib/user')
 
 const TODAY = '2016-10-20'
 const NOT_EXISTING_USERNAME = 'not.existing.username'
+const USER_WITHOUT_PROJECT_USERNAME = 'unemployed.username'
 const TESTUSER = new User(
   'xpeppers.user',
   'toggltoken1023jrwdfsd9v',
@@ -49,10 +50,16 @@ test('track today command with not existing user', t => {
   })
 })
 
-test.skip('track today for an existing user without set project', t => {
-	//...
+test('track today for an existing user without set project', t => {
+  const testableBotBuilder = new TestableBotBuilder()
+  const request = requestBuilder()
+    .withUsername(USER_WITHOUT_PROJECT_USERNAME)
+    .withText('today')
+  const bot = testableBotBuilder.build()
+
+  const response = bot(request)
 	return response.then(res => {
-    t.is('Ciao ' + TESTUSER.username + '. Non so su che progetto tracciare. Usa il comando proj.', res)
+    t.is('Non so su che progetto tracciare te. Imposta prima il progetto.', res)
 		testableBotBuilder.verifyMocksExpectations()
 	})
 })
