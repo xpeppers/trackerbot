@@ -45,7 +45,7 @@ test('track today command with not existing user', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Non ho trovato nessun user associato all\'username: not.existing.username', res)
+    t.is('Non ho trovato nessun user associato all\'username: ' + NOT_EXISTING_USERNAME, res)
     testableBotBuilder.verifyMocksExpectations()
   })
 })
