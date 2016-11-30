@@ -7,7 +7,10 @@ const User = require('../lib/user')
 
 const TODAY = '2016-10-20'
 const NOT_EXISTING_USERNAME = 'not.existing.username'
-const USER_WITHOUT_PROJECT_USERNAME = 'unemployed.username'
+const TESTUSER_WITHOUT_PROJECT = new User(
+  'unemployed.username',
+  '10047j34f32023'
+)
 const TESTUSER = new User(
   'xpeppers.user',
   'toggltoken1023jrwdfsd9v',
@@ -24,6 +27,7 @@ test('track today command', t => {
   const expectedAfternoonEntry = entry(8107914, 'Phoenix', TODAY+'T14:00:00+02:00')
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
+    .withAlreadySavedUsers([TESTUSER])
     .withExpectedCallsOnCreateTimeEntry([expectedMorningEntry, expectedAfternoonEntry])
     .build()
 
@@ -53,9 +57,11 @@ test('track today command with not existing user', t => {
 test('track today for an existing user without set project', t => {
   const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
-    .withUsername(USER_WITHOUT_PROJECT_USERNAME)
+    .withUsername(TESTUSER_WITHOUT_PROJECT.username)
     .withText('today')
-  const bot = testableBotBuilder.build()
+  const bot = testableBotBuilder
+    .withAlreadySavedUsers([TESTUSER_WITHOUT_PROJECT])
+    .build()
 
   const response = bot(request)
 	return response.then(res => {
@@ -69,7 +75,9 @@ test('proj command returns current project', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('proj')
-  const bot = testableBotBuilder.build()
+  const bot = testableBotBuilder
+    .withAlreadySavedUsers([TESTUSER])
+    .build()
 
   const response = bot(request)
 
@@ -87,6 +95,7 @@ test('set token for user', t => {
     .withText('token ' + newToken)
   const expectedSavedUser = new User(TESTUSER.username, newToken, TESTUSER.project.id, TESTUSER.project.description)
   const bot = testableBotBuilder
+    .withAlreadySavedUsers([TESTUSER])
     .withExpectedCallsOnSaveUser([expectedSavedUser])
     .build()
 

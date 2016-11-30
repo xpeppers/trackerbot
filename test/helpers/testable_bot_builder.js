@@ -8,6 +8,12 @@ module.exports = function() {
   this.today = '2016-11-15'
   this.expectedCallsOnCreateTimeEntry = []
   this.expectedCallsOnSaveUser = []
+  this.alreadySavedUsers = []
+
+  this.withAlreadySavedUsers = function(users) {
+    this.alreadySavedUsers = users
+    return this
+  }
 
   this.withExpectedCallsOnCreateTimeEntry = function(expected) {
     this.expectedCallsOnCreateTimeEntry = expected
@@ -62,20 +68,7 @@ module.exports = function() {
     this.userRepositoryStub = { findFromUsername: function() {}, save: function() {} }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
-    const users = [
-      new User(
-        'xpeppers.user',
-        'toggltoken1023jrwdfsd9v',
-        8107914,
-        'Phoenix'
-      ),
-      new User(
-        'unemployed.username',
-        'toggltoken1023jrwdfsd9v'
-      )
-    ]
-
-    users.forEach(user => {
+    this.alreadySavedUsers.forEach(user => {
       this.userRepositoryMock
         .expects('findFromUsername')
         .atLeast(0)
