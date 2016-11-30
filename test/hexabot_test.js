@@ -24,7 +24,7 @@ test('track today command', t => {
   const expectedAfternoonEntry = entry(8107914, 'Phoenix', TODAY+'T14:00:00+02:00')
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
-    .withExpectedEntryTracked([expectedMorningEntry, expectedAfternoonEntry])
+    .withExpectedCallsOnCreateTimeEntry([expectedMorningEntry, expectedAfternoonEntry])
     .build()
 
   const response = bot(request)
@@ -87,7 +87,7 @@ test('set token for user', t => {
     .withText('token ' + newToken)
   const expectedSavedUser = new User(TESTUSER.username, newToken, TESTUSER.project.id, TESTUSER.project.description)
   const bot = testableBotBuilder
-    .withExpectedSavedUsers([expectedSavedUser])
+    .withExpectedCallsOnSaveUser([expectedSavedUser])
     .build()
 
   const response = bot(request)
@@ -106,7 +106,7 @@ test('set token for not existing user', t => {
     .withText('token ' + newToken)
   const expectedSavedUser = new User(NOT_EXISTING_USERNAME, newToken, undefined, undefined)
   const bot = testableBotBuilder
-    .withExpectedSavedUsers([expectedSavedUser])
+    .withExpectedCallsOnSaveUser([expectedSavedUser])
     .build()
 
   const response = bot(request)
@@ -124,7 +124,7 @@ test.skip('set project for an existing user', t => {
 		.withText('proj 9871234 Corte dei Conti')
   const expectedSavedUser = new User(TESTUSER.username, TESTUSER.token, 9871234, 'Corte dei Conti')
 	const bot = testableBotBuilder
-		.withExpectedSavedUsers([expectedSavedUser])
+		.withExpectedCallsOnSaveUser([expectedSavedUser])
 		.build()
 
 	const response = bot(request)

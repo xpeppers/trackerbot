@@ -6,16 +6,16 @@ const User = require('../../lib/user')
 
 module.exports = function() {
   this.today = '2016-11-15'
-  this.expectedEntriesTracked = []
-  this.expectedSavedUsers = []
+  this.expectedCallsOnCreateTimeEntry = []
+  this.expectedCallsOnSaveUser = []
 
-  this.withExpectedEntryTracked = function(expected) {
-    this.expectedEntriesTracked = expected
+  this.withExpectedCallsOnCreateTimeEntry = function(expected) {
+    this.expectedCallsOnCreateTimeEntry = expected
     return this
   }
 
-  this.withExpectedSavedUsers = function(expected) {
-    this.expectedSavedUsers = expected
+  this.withExpectedCallsOnSaveUser = function(expected) {
+    this.expectedCallsOnSaveUser = expected
     return this
   }
 
@@ -49,7 +49,7 @@ module.exports = function() {
     const trackerPrototype = require('../../lib/tracker')('uselessToggleToken')
     this.trackerMock = sinon.mock(trackerPrototype)
 
-    this.expectedEntriesTracked.forEach(function(entry) {
+    this.expectedCallsOnCreateTimeEntry.forEach(function(entry) {
       this.trackerMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
     }, this)
 
@@ -62,42 +62,38 @@ module.exports = function() {
     this.userRepositoryStub = { findFromUsername: function() {}, save: function() {} }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
-    // TODO put a foreach with users here!
-    const userFromRepository = new User(
-      'xpeppers.user',
-      'toggltoken1023jrwdfsd9v',
-      8107914,
-      'Phoenix'
-    )
-    const userWithoutSetProject = new User(
-      'unemployed.username',
-      'toggltoken1023jrwdfsd9v'
-    )
+    const users = [
+      new User(
+        'xpeppers.user',
+        'toggltoken1023jrwdfsd9v',
+        8107914,
+        'Phoenix'
+      ),
+      new User(
+        'unemployed.username',
+        'toggltoken1023jrwdfsd9v'
+      )
+    ]
 
-    this.userRepositoryMock
-      .expects('findFromUsername')
-      .atLeast(0)
-      .withArgs(userFromRepository.username)
-      .returns(Promise.resolve(userFromRepository))
+    users.forEach(user => {
+      this.userRepositoryMock
+        .expects('findFromUsername')
+        .atLeast(0)
+        .withArgs(user.username)
+        .returns(Promise.resolve(user))
+    }, this)
 
-    this.userRepositoryMock
-      .expects('findFromUsername')
-      .atLeast(0)
-      .withArgs(userWithoutSetProject.username)
-      .returns(Promise.resolve(userWithoutSetProject))
-
-    this.userRepositoryMock
-      .expects('findFromUsername')
-      .atLeast(0)
-      .returns(Promise.resolve(undefined))
-
-    this.expectedSavedUsers.forEach(function(user) {
+    this.expectedCallsOnSaveUser.forEach(user => {
       this.userRepositoryMock
         .expects("save").once()
         .withArgs(user)
         .returns(Promise.resolve())
     }, this)
 
+    this.userRepositoryMock
+      .expects('findFromUsername')
+      .atLeast(0)
+      .returns(Promise.resolve(undefined))
   }
 
   function getMomentStub(date) {
