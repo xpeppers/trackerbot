@@ -11,6 +11,10 @@ const TESTUSER = new User(
   8107914,
   'Phoenix'
 )
+const TESTUSER_WITHOUT_PROJECT = new User(
+  'unemployed.username',
+  '10047j34f32023'
+)
 
 test('proj command returns current project', t => {
   const testableBotBuilder = new TestableBotBuilder()
@@ -29,13 +33,14 @@ test('proj command returns current project', t => {
   })
 })
 
-test.skip('set project for an existing user', t => {
+test('set project for an existing user', t => {
   const testableBotBuilder = new TestableBotBuilder()
 	const request = requestBuilder()
-		.withUsername(TESTUSER.username)
+		.withUsername(TESTUSER_WITHOUT_PROJECT.username)
 		.withText('proj 9871234 Corte dei Conti')
-  const expectedSavedUser = new User(TESTUSER.username, TESTUSER.token, 9871234, 'Corte dei Conti')
+  const expectedSavedUser = new User(TESTUSER_WITHOUT_PROJECT.username, TESTUSER_WITHOUT_PROJECT.token, '9871234', 'Corte dei Conti')
 	const bot = testableBotBuilder
+    .withAlreadySavedUsers([TESTUSER_WITHOUT_PROJECT])
 		.withExpectedCallsOnSaveUser([expectedSavedUser])
 		.build()
 
