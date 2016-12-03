@@ -6,6 +6,7 @@
   "scripts": {
     "create": "claudia create --api-module bot --region us-east-1 --configure-slack-slash-command --policies policies",
     "update": "claudia update",
+    "test:offline": "ava test/offline",
     "test": "ava"
   },
   "repository": {
