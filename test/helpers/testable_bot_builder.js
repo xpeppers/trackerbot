@@ -46,7 +46,9 @@ module.exports = function() {
 
     return proxyquire('../../lib', {
       'moment': moment,
+      './user_repository': this.userRepositoryStub,
       '../user_repository': this.userRepositoryStub,
+      './tracker': this.trackerStub,
       '../tracker': this.trackerStub,
     })
   }
