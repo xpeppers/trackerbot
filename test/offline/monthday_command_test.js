@@ -9,8 +9,8 @@ const TODAY = '2016-10-20'
 const TESTUSER = new User(
   'xpeppers.user',
   'toggltoken1023jrwdfsd9v',
-  8107914,
-  'Phoenix'
+  9243852,
+  'MPOS'
 )
 
 test('track past day in current month', t => {
@@ -18,8 +18,8 @@ test('track past day in current month', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('18')
-  const expectedMorningEntry = entry(8107914, 'Phoenix', '2016-10-18T09:00:00+02:00')
-  const expectedAfternoonEntry = entry(8107914, 'Phoenix', '2016-10-18T14:00:00+02:00')
+  const expectedMorningEntry = entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-18T09:00:00+02:00')
+  const expectedAfternoonEntry = entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-18T14:00:00+02:00')
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
     .withAlreadySavedUsers([TESTUSER])
@@ -29,7 +29,7 @@ test('track past day in current month', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata Tuesday, October 18th 2016.', res)
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata Tuesday, October 18th 2016 sul progetto MPOS (9243852).', res)
     testableBotBuilder.verifyMocksExpectations()
   })
 })

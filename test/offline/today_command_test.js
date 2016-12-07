@@ -23,8 +23,8 @@ test('track today command', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('today')
-  const expectedMorningEntry = entry(8107914, 'Phoenix', TODAY+'T09:00:00+02:00')
-  const expectedAfternoonEntry = entry(8107914, 'Phoenix', TODAY+'T14:00:00+02:00')
+  const expectedMorningEntry = entry(TESTUSER.project.id, TESTUSER.project.description, TODAY+'T09:00:00+02:00')
+  const expectedAfternoonEntry = entry(TESTUSER.project.id, TESTUSER.project.description, TODAY+'T14:00:00+02:00')
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
     .withAlreadySavedUsers([TESTUSER])
@@ -34,7 +34,7 @@ test('track today command', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata Thursday, October 20th 2016.', res)
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata Thursday, October 20th 2016 sul progetto Phoenix (8107914).', res)
     testableBotBuilder.verifyMocksExpectations()
   })
 })
