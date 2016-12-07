@@ -95,7 +95,7 @@ module.exports = function() {
     return {
       today: function() {
         const moment = require('moment-timezone')
-        return moment(todayDate)
+        return moment(todayDate).tz('America/New_York')
       }
     }
   }
