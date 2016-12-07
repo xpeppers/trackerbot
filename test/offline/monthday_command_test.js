@@ -29,7 +29,7 @@ test('track past day in current month', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata Tuesday, October 18th 2016 sul progetto MPOS (9243852).', res)
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di Martedì 18 ottobre sul progetto MPOS (9243852).', res)
     testableBotBuilder.verifyMocksExpectations()
   })
 })

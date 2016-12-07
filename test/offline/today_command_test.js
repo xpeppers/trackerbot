@@ -34,7 +34,7 @@ test('track today command', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata Thursday, October 20th 2016 sul progetto Phoenix (8107914).', res)
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di Giovedì 20 ottobre sul progetto Phoenix (8107914).', res)
     testableBotBuilder.verifyMocksExpectations()
   })
 })
