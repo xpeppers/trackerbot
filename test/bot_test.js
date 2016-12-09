@@ -3,7 +3,6 @@ const test = require('ava');
 const bot = require('../lib');
 const requestBuilder = require('./helpers/request_builder');
 
-const USER_WITH_TEST_TOGGL_TOKEN = 'toggltoken';
 const TEST_USER = 'testuser';
 
 test('returns error message if token is not found ', t => {
