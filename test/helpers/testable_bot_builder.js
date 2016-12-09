@@ -36,16 +36,16 @@ module.exports = function() {
   }
 
   this.build = function() {
-    const clockStub = buildClockStub(this.today)
+    const momentStub = buildMomentStub(this.today)
     this.buildUserRepositoryMocks()
     this.buildTrackerMocks()
 
-    clockStub['@global'] = true
+    momentStub['@global'] = true
     this.userRepositoryStub['@global'] = true
     this.trackerStub['@global'] = true
 
     return proxyquire('../../lib', {
-      '../clock': clockStub,
+      'moment-timezone': momentStub,
       './user_repository': this.userRepositoryStub,
       '../user_repository': this.userRepositoryStub,
       './tracker': this.trackerStub,
@@ -91,12 +91,9 @@ module.exports = function() {
       .returns(Promise.resolve(undefined))
   }
 
-  function buildClockStub(todayDate) {
-    return {
-      today: function() {
-        const moment = require('moment-timezone')
-        return moment(todayDate).tz('America/New_York')
-      }
+  function buildMomentStub(todayDate) {
+    return function() {
+      return require('moment-timezone')(todayDate).tz('America/New_York')
     }
   }
 
