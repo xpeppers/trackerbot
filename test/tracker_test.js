@@ -10,6 +10,11 @@ test('list available projects on toggl', t => {
   const response = toggl.getWorkspaceProjects(TESTUSER_WORKSPACE_ID)
 
   return response.then(projects => {
-    t.is(projects.length, 2)
+    const expected = [
+      { name: 'Another Test Project', id: 26883667 },
+      { name: 'Test Project', id: 26883634 },
+    ]
+
+    t.deepEqual(projects, expected)
   })
 })
