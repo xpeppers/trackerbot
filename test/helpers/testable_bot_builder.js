@@ -57,6 +57,16 @@ module.exports = function() {
     const trackerPrototype = require('../../lib/tracker')('uselessToggleToken')
     this.trackerMock = sinon.mock(trackerPrototype)
 
+    const projectsFromToggl = [
+      { name: 'Primo progetto', id: 1234567 },
+      { name: 'Secondo progetto', id: 9878755 },
+      { name: 'Altro progetto', id: 3476547 },
+    ]
+    this.trackerMock
+      .expects("getWorkspaceProjects")
+      .atLeast(0)
+      .returns(Promise.resolve(projectsFromToggl))
+
     this.expectedCallsOnCreateTimeEntry.forEach(function(entry) {
       this.trackerMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
     }, this)
