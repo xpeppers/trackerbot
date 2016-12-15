@@ -23,16 +23,15 @@ test('return project name for project command', t => {
   });
 });
 
-test.skip('return projects list for proj ls command', t => {
-  const request = requestBuilder().withText('proj ls').withUsername(TEST_USER);
+test('return projects list for proj ls command', t => {
+  const request = requestBuilder().withText('proj ls').withUsername('dmegna');
   const response = bot(request);
 
   return response.then(res => {
-    const expected = 'Ecco i progetti disponibili:\n' +
-      "* Primo progetto (1234567)\n" +
-      "* Secondo progetto (9878755)\n" +
-      "* Altro progetto (3476547)"
-    t.is(expected, res);
+    t.true(res.includes('Ecco i progetti disponibili:\n'))
+    t.true(res.includes('* Assenza (8352044)\n'))
+    t.true(res.includes('* Attività interne (8107341)\n'))
+    t.true(res.includes('* MPOS (8117873)\n'))
   });
 });
 
