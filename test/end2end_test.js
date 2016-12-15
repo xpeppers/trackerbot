@@ -3,7 +3,7 @@ const test = require('ava');
 const bot = require('../lib');
 const requestBuilder = require('./helpers/request_builder');
 
-const TEST_USER = 'testuser';
+const TEST_USER = 'test.user';
 
 test('returns error message if token is not found ', t => {
   const request = requestBuilder().withText('today').withUsername('not_existent_user');
@@ -19,7 +19,7 @@ test('return project name for project command', t => {
   const response = bot(request);
 
   return response.then(res => {
-    t.is('Ciao, attualmente sto tracciando su Test Proj Description (123654)', res);
+    t.is('Ciao, attualmente sto tracciando su Test Proj Description (26883634)', res);
   });
 });
 

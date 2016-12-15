@@ -4,12 +4,12 @@ const userRepository = require('../lib/user_repository');
 const User = require('../lib/user');
 
 test('returns user object on given username', t => {
-  return userRepository.findFromUsername('testuser')
+  return userRepository.findFromUsername('test.user')
   .then(user => {
-    t.is('test_token', user.token);
-    t.is('testuser', user.username);
+    t.is('7e7526d01db9b5d723e9a3e0943e4d99', user.token);
+    t.is('test.user', user.username);
     t.is('Test Proj Description', user.project.description);
-    t.is(123654, user.project.id);
+    t.is(26883634, user.project.id);
   });
 });
 
