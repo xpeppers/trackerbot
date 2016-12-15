@@ -33,6 +33,23 @@ test('proj command returns current project', t => {
   })
 })
 
+test('proj command for user without set project', t => {
+  const testableBotBuilder = new TestableBotBuilder()
+  const request = requestBuilder()
+    .withUsername(TESTUSER_WITHOUT_PROJECT.username)
+    .withText('proj')
+  const bot = testableBotBuilder
+    .withAlreadySavedUsers([TESTUSER, TESTUSER_WITHOUT_PROJECT])
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Non so su che progetto tracciare te. Imposta prima il progetto.', res)
+    testableBotBuilder.verifyMocksExpectations()
+  })
+})
+
 test('set project for an existing user', t => {
   const testableBotBuilder = new TestableBotBuilder()
 	const request = requestBuilder()
@@ -40,7 +57,7 @@ test('set project for an existing user', t => {
 		.withText('proj 9871234 Corte dei Conti')
   const expectedSavedUser = new User(TESTUSER_WITHOUT_PROJECT.username, TESTUSER_WITHOUT_PROJECT.token, '9871234', 'Corte dei Conti')
 	const bot = testableBotBuilder
-    .withAlreadySavedUsers([TESTUSER_WITHOUT_PROJECT])
+    .withAlreadySavedUsers([TESTUSER, TESTUSER_WITHOUT_PROJECT])
 		.withExpectedCallsOnSaveUser([expectedSavedUser])
 		.build()
 
