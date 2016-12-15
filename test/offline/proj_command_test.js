@@ -52,7 +52,7 @@ test('set project for an existing user', t => {
 	})
 })
 
-test('proj list command returns the project list', t => {
+test('proj list command returns the project list sorted', t => {
   const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
@@ -65,9 +65,9 @@ test('proj list command returns the project list', t => {
   
   return response.then(res => {
     const expected = 'Ecco i progetti disponibili:\n' +
+      "* Altro progetto (3476547)\n" +
       "* Primo progetto (1234567)\n" +
-      "* Secondo progetto (9878755)\n" +
-      "* Altro progetto (3476547)"
+      "* Secondo progetto (9878755)"
     t.is(expected, res)
     testableBotBuilder.verifyMocksExpectations()
 	})
