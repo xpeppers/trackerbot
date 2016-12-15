@@ -31,7 +31,7 @@ module.exports = function() {
   }
 
   this.verifyMocksExpectations = function() {
-    this.trackerMock.verify()
+    this.togglBridgeMock.verify()
     this.userRepositoryMock.verify()
   }
 
@@ -42,37 +42,37 @@ module.exports = function() {
 
     momentStub['@global'] = true
     this.userRepositoryStub['@global'] = true
-    this.trackerStub['@global'] = true
+    this.togglBridgeStub['@global'] = true
 
     return proxyquire('../../lib', {
       'moment-timezone': momentStub,
       './user_repository': this.userRepositoryStub,
       '../user_repository': this.userRepositoryStub,
-      './tracker': this.trackerStub,
-      '../tracker': this.trackerStub,
+      './toggl_bridge': this.togglBridgeStub,
+      '../toggl_bridge': this.togglBridgeStub,
     })
   }
 
   this.buildTrackerMocks = function() {
-    const trackerPrototype = require('../../lib/tracker')('uselessToggleToken')
-    this.trackerMock = sinon.mock(trackerPrototype)
+    const togglBridgePrototype = require('../../lib/toggl_bridge')('uselessToggleToken')
+    this.togglBridgeMock = sinon.mock(togglBridgePrototype)
 
     const projectsFromToggl = [
       { name: 'Primo progetto', id: 1234567 },
       { name: 'Secondo progetto', id: 9878755 },
       { name: 'Altro progetto', id: 3476547 },
     ]
-    this.trackerMock
+    this.togglBridgeMock
       .expects("getWorkspaceProjects")
       .atLeast(0)
       .returns(Promise.resolve(projectsFromToggl))
 
     this.expectedCallsOnCreateTimeEntry.forEach(function(entry) {
-      this.trackerMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
+      this.togglBridgeMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
     }, this)
 
-    this.trackerStub = function(token) {
-      return trackerPrototype
+    this.togglBridgeStub = function(token) {
+      return togglBridgePrototype
     }
   }
 
