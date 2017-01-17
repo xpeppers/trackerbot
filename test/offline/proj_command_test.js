@@ -69,7 +69,7 @@ test('set project for an existing user', t => {
 	})
 })
 
-test('proj list command returns the project list sorted', t => {
+test('proj ls command shows the project list sorted', t => {
   const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
