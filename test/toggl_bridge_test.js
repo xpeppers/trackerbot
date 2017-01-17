@@ -22,7 +22,7 @@ test('list available projects on toggl', t => {
 test('get last month time entries', t => {
   const toggl = togglBridge(TESTUSER_TOKEN)
 
-  const response = toggl.getLastMonthTimeEntry()
+  const response = toggl.getLastMonthTimeEntries()
 
   const expected = [
     { description: 'First activity tracked', pId: 26883634, date: new Date(2017,0,12), durationInHour: 4 },
