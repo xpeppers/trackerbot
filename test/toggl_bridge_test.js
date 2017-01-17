@@ -25,12 +25,12 @@ test('get last month time entries', t => {
   const response = toggl.getLastMonthTimeEntries()
 
   const expected = [
-    { description: 'First activity tracked', pId: 26883634, date: new Date(2017,0,12), durationInHour: 4 },
-    { description: 'First activity tracked', pId: 26883634, date: new Date(2017,0,12), durationInHour: 4 },
-    { description: 'Another Project task', pId: 26883667, date: new Date(2017,0,11), durationInHour: 4 },
-    { description: 'Another Project task', pId: 26883667, date: new Date(2017,0,11), durationInHour: 4 },
-    { description: 'Task red', pId: 26883634, date: new Date(2017,0,10), durationInHour: 4 },
-    { description: 'Issue fixed', pId: 26883667, date: new Date(2017,0,9), durationInHour: 4 },
+    { description: 'First activity tracked', pId: 26883634, date: "2017-01-12", durationInHour: 4 },
+    { description: 'First activity tracked', pId: 26883634, date: "2017-01-12", durationInHour: 4 },
+    { description: 'Another Project task', pId: 26883667, date: "2017-01-11", durationInHour: 4 },
+    { description: 'Another Project task', pId: 26883667, date: "2017-01-11", durationInHour: 4 },
+    { description: 'Task red', pId: 26883634, date: "2017-01-10", durationInHour: 4 },
+    { description: 'Issue fixed', pId: 26883667, date: "2017-01-09", durationInHour: 4 },
   ]
 
   return response.then(entries => {
