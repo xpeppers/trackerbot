@@ -67,6 +67,15 @@ module.exports = function() {
       .atLeast(0)
       .returns(Promise.resolve(projectsFromToggl))
 
+    const entriesFromToggl = [
+      { description: 'MPOS', pId: 9243852, date: '2017-01-03', durationInHour: 8 },
+      { description: 'MPOS', pId: 9243852, date: '2017-01-02', durationInHour: 8 },
+    ]
+    this.togglBridgeMock
+      .expects("getLastMonthTimeEntries")
+      .atLeast(0)
+      .returns(Promise.resolve(entriesFromToggl))
+
     this.expectedCallsOnCreateTimeEntry.forEach(function(entry) {
       this.togglBridgeMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
     }, this)
@@ -102,8 +111,9 @@ module.exports = function() {
   }
 
   function buildMomentStub(todayDate) {
-    return function() {
-      return require('moment-timezone')(todayDate).tz('America/New_York')
+    return function(stringToParse) {
+      stringToParse = stringToParse || todayDate
+      return require('moment-timezone')(stringToParse).tz('America/New_York')
     }
   }
 
