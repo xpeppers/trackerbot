@@ -23,8 +23,8 @@ test('track today command', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('today')
-  const expectedMorningEntry = entry(TESTUSER.project.id, TESTUSER.project.description, TODAY+'T09:00:00+01:00')
-  const expectedAfternoonEntry = entry(TESTUSER.project.id, TESTUSER.project.description, TODAY+'T14:00:00+01:00')
+  const expectedMorningEntry = entry(TESTUSER.project.id, TESTUSER.project.description, TODAY + 'T09:00:00+01:00')
+  const expectedAfternoonEntry = entry(TESTUSER.project.id, TESTUSER.project.description, TODAY + 'T14:00:00+01:00')
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
     .withAlreadySavedUsers([TESTUSER])
@@ -34,7 +34,7 @@ test('track today command', t => {
   const response = bot(request)
 
   return response.then(res => {
-    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di Lunedì 21 novembre sul progetto Phoenix (8107914).', res)
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di lunedì 21 novembre sul progetto Phoenix (8107914).', res)
     testableBotBuilder.verifyMocksExpectations()
   })
 })
@@ -64,10 +64,10 @@ test('track today for an existing user without set project', t => {
     .build()
 
   const response = bot(request)
-	return response.then(res => {
+  return response.then(res => {
     t.is('Non so su che progetto tracciare te. Imposta prima il progetto.', res)
-		testableBotBuilder.verifyMocksExpectations()
-	})
+    testableBotBuilder.verifyMocksExpectations()
+  })
 })
 
 function entry(pid, description, startTime) {
