@@ -64,8 +64,7 @@ module.exports = function() {
     ]
     this.togglBridgeMock
       .expects("getWorkspaceProjects")
-      .atLeast(0)
-      .returns(Promise.resolve(projectsFromToggl))
+      .atLeast(0).returns(Promise.resolve(projectsFromToggl))
 
     const entriesFromToggl = [
       { description: 'MPOS', pId: 9243852, date: '2017-01-03', durationInHour: 8 },
@@ -73,12 +72,18 @@ module.exports = function() {
     ]
     this.togglBridgeMock
       .expects("getLastMonthTimeEntries")
-      .atLeast(0)
-      .returns(Promise.resolve(entriesFromToggl))
+      .atLeast(0).returns(Promise.resolve(entriesFromToggl))
 
-    this.expectedCallsOnCreateTimeEntry.forEach(function(entry) {
-      this.togglBridgeMock.expects("createTimeEntry").once().withArgs(entry).returns(Promise.resolve())
-    }, this)
+    if(this.expectedCallsOnCreateTimeEntry.length > 0) {
+      this.expectedCallsOnCreateTimeEntry.forEach(entry => {
+        this.togglBridgeMock
+          .expects("createTimeEntry").once()
+          .withArgs(entry)
+          .returns(Promise.resolve())
+      }, this)
+    } else {
+      this.togglBridgeMock.expects("createTimeEntry").never()
+    }
 
     this.togglBridgeStub = function(token) {
       return togglBridgePrototype
@@ -97,12 +102,16 @@ module.exports = function() {
         .returns(Promise.resolve(user))
     }, this)
 
-    this.expectedCallsOnSaveUser.forEach(user => {
-      this.userRepositoryMock
-        .expects("save").once()
-        .withArgs(user)
-        .returns(Promise.resolve())
-    }, this)
+    if(this.expectedCallsOnSaveUser.length > 0) {
+      this.expectedCallsOnSaveUser.forEach(user => {
+        this.userRepositoryMock
+          .expects("save").once()
+          .withArgs(user)
+          .returns(Promise.resolve())
+      }, this)
+    } else {
+      this.userRepositoryMock.expects("save").never()
+    }
 
     this.userRepositoryMock
       .expects('findFromUsername')
