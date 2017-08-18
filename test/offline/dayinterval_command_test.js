@@ -20,12 +20,12 @@ test('track past days in current month', t => {
     .withText('17-19')
 
   const expectedEntries = [
-    entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-17T09:00:00+02:00'),
-    entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-17T14:00:00+02:00'),
-    entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-18T09:00:00+02:00'),
-    entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-18T14:00:00+02:00'),
-    entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-19T09:00:00+02:00'),
-    entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-19T14:00:00+02:00'),
+    entry('2016-10-17T09:00:00+02:00'),
+    entry('2016-10-17T14:00:00+02:00'),
+    entry('2016-10-18T09:00:00+02:00'),
+    entry('2016-10-18T14:00:00+02:00'),
+    entry('2016-10-19T09:00:00+02:00'),
+    entry('2016-10-19T14:00:00+02:00'),
   ]
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
@@ -41,10 +41,29 @@ test('track past days in current month', t => {
   })
 })
 
-function entry(pid, description, startTime) {
+test('wrong ranges cannot be tracked', t => {
+  const testableBotBuilder = new TestableBotBuilder()
+  const request = requestBuilder()
+    .withUsername(TESTUSER.username)
+    .withText('20-17')
+
+  const bot = testableBotBuilder
+    .withTodayDate(TODAY)
+    .withAlreadySavedUsers([TESTUSER])
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Il range specificato non è un range valido.', res)
+    testableBotBuilder.verifyMocksExpectations()
+  })
+})
+
+function entry(startTime) {
   return {
-    pid: pid,
-    description: description,
+    pid: TESTUSER.project.id,
+    description: TESTUSER.project.description,
     created_with: 'TrackerBot',
     duration: 14400,
     billable: true,
