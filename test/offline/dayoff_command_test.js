@@ -18,7 +18,7 @@ const DAY_OFF = {
     description: "Assenza"
 }
 
-test.skip('track past day in current month as day off', t => {
+test('track past day in current month as day off', t => {
     const testableBotBuilder = new TestableBotBuilder()
     const request = requestBuilder()
         .withUsername(TESTUSER.username)
@@ -34,7 +34,7 @@ test.skip('track past day in current month as day off', t => {
     const response = bot(request)
 
     return response.then(res => {
-        t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di mercoledì 17 agosto sul progetto Assenza (8352044).', res)
+        t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di mercoledì 16 agosto sul progetto Assenza (8352044).', res)
         testableBotBuilder.verifyMocksExpectations()
     })
 })
@@ -46,6 +46,7 @@ function entry(pid, description, startTime) {
         created_with: 'TrackerBot',
         duration: 4 * 60 * 60,
         billable: true,
-        start: startTime
+        start: startTime,
+        tags: ["Ferie"]
     }
 }
