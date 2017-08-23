@@ -15,7 +15,7 @@ const TESTUSER = new User(
 
 const DAY_OFF = {
     id: "8352044",
-    description: "Assenza"
+    description: "Ferie"
 }
 
 test('track past day in current month as day off', t => {
@@ -34,7 +34,7 @@ test('track past day in current month as day off', t => {
     const response = bot(request)
 
     return response.then(res => {
-        t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di mercoledì 16 agosto sul progetto Assenza (8352044).', res)
+        t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di mercoledì 16 agosto sul progetto Ferie (8352044).', res)
         testableBotBuilder.verifyMocksExpectations()
     })
 })
