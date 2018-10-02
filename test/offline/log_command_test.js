@@ -23,11 +23,11 @@ test('log command shows last entries tracked', t => {
 
   const response = bot(request)
   const expected = 'Hai recentemente tracciato:\n' +
-    "- Martedì 03 gennaio 8h sul progetto MPOS (9243852).\n" +
-    "- Lunedì 02 gennaio 8h sul progetto MPOS (9243852)."
-  
+    "- martedì 03 gennaio 8h sul progetto MPOS (9243852).\n" +
+    "- lunedì 02 gennaio 8h sul progetto MPOS (9243852)."
+
   return response.then(res => {
     t.is(expected, res)
     testableBotBuilder.verifyMocksExpectations()
-	})
+  })
 })

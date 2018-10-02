@@ -6,15 +6,16 @@
 
 Build it:
 ```
-docker build -t trackerbot .
+$ docker build -t trackerbot .
 ```
 
 Run it interactive:
 ```
-docker run -itv $(pwd):/app --name tb trackerbot
+$ docker run --rm -itv $(pwd):/app --name tb trackerbot
 ```
 
 Run tests inside the container:
 ```
-AWS_ACCESS_KEY_ID=[YOUR_AWS_ACCESS_KEY_ID] AWS_SECRET_ACCESS_KEY=[YOUR_AWS_SECRET_ACCESS_KEY] AWS_REGION=us-east-1 npm t
+$ npm test test/offline
+$ AWS_ACCESS_KEY_ID=[YOUR_AWS_ACCESS_KEY_ID] AWS_SECRET_ACCESS_KEY=[YOUR_AWS_SECRET_ACCESS_KEY] AWS_REGION=us-east-1 npm t
 ```

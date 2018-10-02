@@ -22,8 +22,8 @@
   "dependencies": {
     "aws-sdk": "^2.6.7",
     "claudia-bot-builder": "^2.0.0",
-    "moment": "^2.15.1",
-    "moment-timezone": "^0.5.9",
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "toggl-api": "^1.0.1"
   },
   "devDependencies": {
