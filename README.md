@@ -19,3 +19,8 @@ Run tests inside the container:
 $ npm test test/offline
 $ AWS_ACCESS_KEY_ID=[YOUR_AWS_ACCESS_KEY_ID] AWS_SECRET_ACCESS_KEY=[YOUR_AWS_SECRET_ACCESS_KEY] AWS_REGION=us-east-1 npm t
 ```
+
+Deploy local version to production:
+```
+$ AWS_ACCESS_KEY_ID=[YOUR_AWS_ACCESS_KEY_ID] AWS_SECRET_ACCESS_KEY=[YOUR_AWS_SECRET_ACCESS_KEY] AWS_REGION=us-east-1 npm run update
+```
