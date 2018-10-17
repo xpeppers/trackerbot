@@ -62,8 +62,6 @@ test(`don't track weekends`, t => {
   const response = bot(request)
 
   return response.then(res => {
-    console.log(res);
-
     t.is('Ciao ' + TESTUSER.username + '. Ho tracciato le giornate da venerdì 14 ottobre a lunedì 17 ottobre sul progetto MPOS (9243852).', res)
     testableBotBuilder.verifyMocksExpectations()
   })
