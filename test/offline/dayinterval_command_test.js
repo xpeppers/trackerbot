@@ -41,6 +41,34 @@ test('track past days in current month', t => {
   })
 })
 
+test(`don't track weekends`, t => {
+  const testableBotBuilder = new TestableBotBuilder()
+  const request = requestBuilder()
+    .withUsername(TESTUSER.username)
+    .withText('14-17')
+
+  const expectedEntries = [
+    entry('2016-10-14T09:00:00+02:00'),
+    entry('2016-10-14T14:00:00+02:00'),
+    entry('2016-10-17T09:00:00+02:00'),
+    entry('2016-10-17T14:00:00+02:00'),
+  ]
+  const bot = testableBotBuilder
+    .withTodayDate(TODAY)
+    .withAlreadySavedUsers([TESTUSER])
+    .withExpectedCallsOnCreateTimeEntry(expectedEntries)
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    console.log(res);
+
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato le giornate da venerdì 14 ottobre a lunedì 17 ottobre sul progetto MPOS (9243852).', res)
+    testableBotBuilder.verifyMocksExpectations()
+  })
+})
+
 test('wrong ranges cannot be tracked', t => {
   const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
