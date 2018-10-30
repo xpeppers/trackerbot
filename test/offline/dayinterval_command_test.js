@@ -67,6 +67,32 @@ test(`don't track weekends`, t => {
   })
 })
 
+test("tracks weekends when explicitly requested", t => {
+  const testableBotBuilder = new TestableBotBuilder()
+  const request = requestBuilder()
+    .withUsername(TESTUSER.username)
+    .withText('15-16')
+
+  const expectedEntries = [
+    entry('2016-10-15T09:00:00+02:00'),
+    entry('2016-10-15T14:00:00+02:00'),
+    entry('2016-10-16T09:00:00+02:00'),
+    entry('2016-10-16T14:00:00+02:00')
+  ]
+  const bot = testableBotBuilder
+    .withTodayDate(TODAY)
+    .withAlreadySavedUsers([TESTUSER])
+    .withExpectedCallsOnCreateTimeEntry(expectedEntries)
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato le giornate da sabato 15 ottobre a domenica 16 ottobre sul progetto MPOS (9243852).', res)
+    testableBotBuilder.verifyMocksExpectations()
+  })
+})
+
 test('wrong ranges cannot be tracked', t => {
   const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
