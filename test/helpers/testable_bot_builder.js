@@ -4,38 +4,38 @@ const sinon = require('sinon')
 const proxyquire = require('proxyquire')
 const User = require('../../lib/user')
 
-module.exports = function() {
+module.exports = function () {
   this.today = '2016-11-15'
   this.expectedCallsOnCreateTimeEntry = []
   this.expectedCallsOnSaveUser = []
   this.alreadySavedUsers = []
 
-  this.withAlreadySavedUsers = function(users) {
+  this.withAlreadySavedUsers = function (users) {
     this.alreadySavedUsers = users
     return this
   }
 
-  this.withExpectedCallsOnCreateTimeEntry = function(expected) {
+  this.withExpectedCallsOnCreateTimeEntry = function (expected) {
     this.expectedCallsOnCreateTimeEntry = expected
     return this
   }
 
-  this.withExpectedCallsOnSaveUser = function(expected) {
+  this.withExpectedCallsOnSaveUser = function (expected) {
     this.expectedCallsOnSaveUser = expected
     return this
   }
 
-  this.withTodayDate = function(today) {
+  this.withTodayDate = function (today) {
     this.today = today
     return this
   }
 
-  this.verifyMocksExpectations = function() {
+  this.verifyMocksExpectations = function () {
     this.togglBridgeMock.verify()
     this.userRepositoryMock.verify()
   }
 
-  this.build = function() {
+  this.build = function () {
     const momentStub = buildMomentStub(this.today)
     this.buildUserRepositoryMocks()
     this.buildTrackerMocks()
@@ -47,13 +47,11 @@ module.exports = function() {
     return proxyquire('../../lib', {
       'moment-timezone': momentStub,
       './user_repository': this.userRepositoryStub,
-      '../user_repository': this.userRepositoryStub,
-      './toggl_bridge': this.togglBridgeStub,
-      '../toggl_bridge': this.togglBridgeStub,
+      './toggl_bridge': this.togglBridgeStub
     })
   }
 
-  this.buildTrackerMocks = function() {
+  this.buildTrackerMocks = function () {
     const togglBridgePrototype = require('../../lib/toggl_bridge')('uselessToggleToken')
     this.togglBridgeMock = sinon.mock(togglBridgePrototype)
 
@@ -74,7 +72,7 @@ module.exports = function() {
       .expects("getLastMonthTimeEntries")
       .atLeast(0).returns(Promise.resolve(entriesFromToggl))
 
-    if(this.expectedCallsOnCreateTimeEntry.length > 0) {
+    if (this.expectedCallsOnCreateTimeEntry.length > 0) {
       this.expectedCallsOnCreateTimeEntry.forEach(entry => {
         this.togglBridgeMock
           .expects("createTimeEntry").once()
@@ -85,13 +83,13 @@ module.exports = function() {
       this.togglBridgeMock.expects("createTimeEntry").never()
     }
 
-    this.togglBridgeStub = function(token) {
+    this.togglBridgeStub = function (token) {
       return togglBridgePrototype
     }
   }
 
-  this.buildUserRepositoryMocks = function() {
-    this.userRepositoryStub = { findFromUsername: function() {}, save: function() {} }
+  this.buildUserRepositoryMocks = function () {
+    this.userRepositoryStub = { findFromUsername: function () { }, save: function () { } }
     this.userRepositoryMock = sinon.mock(this.userRepositoryStub)
 
     this.alreadySavedUsers.forEach(user => {
@@ -102,7 +100,7 @@ module.exports = function() {
         .returns(Promise.resolve(user))
     }, this)
 
-    if(this.expectedCallsOnSaveUser.length > 0) {
+    if (this.expectedCallsOnSaveUser.length > 0) {
       this.expectedCallsOnSaveUser.forEach(user => {
         this.userRepositoryMock
           .expects("save").once()
@@ -120,7 +118,7 @@ module.exports = function() {
   }
 
   function buildMomentStub(todayDate) {
-    return function(stringToParse) {
+    return function (stringToParse) {
       stringToParse = stringToParse || todayDate
       return require('moment-timezone')(stringToParse).tz('America/New_York')
     }
