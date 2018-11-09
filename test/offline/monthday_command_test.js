@@ -18,8 +18,8 @@ test('track past day in current month', t => {
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('18')
-  const expectedMorningEntry = entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-18T09:00:00+02:00')
-  const expectedAfternoonEntry = entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-18T14:00:00+02:00')
+  const expectedMorningEntry = entry('2016-10-18T09:00:00+02:00')
+  const expectedAfternoonEntry = entry('2016-10-18T14:00:00+02:00')
   const bot = testableBotBuilder
     .withTodayDate(TODAY)
     .withAlreadySavedUsers([TESTUSER])
@@ -34,13 +34,34 @@ test('track past day in current month', t => {
   })
 })
 
+test('tracks weekend day when explicitly requested', t => {
+  const testableBotBuilder = new TestableBotBuilder()
+  const request = requestBuilder()
+    .withUsername(TESTUSER.username)
+    .withText('16')
+  const expectedMorningEntry = entry('2016-10-16T09:00:00+02:00')
+  const expectedAfternoonEntry = entry('2016-10-16T14:00:00+02:00')
+  const bot = testableBotBuilder
+    .withTodayDate(TODAY)
+    .withAlreadySavedUsers([TESTUSER])
+    .withExpectedCallsOnCreateTimeEntry([expectedMorningEntry, expectedAfternoonEntry])
+    .build()
+
+  const response = bot(request)
+
+  return response.then(res => {
+    t.is('Ciao ' + TESTUSER.username + '. Ho tracciato la giornata di domenica 16 ottobre sul progetto MPOS (9243852).', res)
+    testableBotBuilder.verifyMocksExpectations()
+  })
+})
+
 test('it works also between months', t => {
   const testableBotBuilder = new TestableBotBuilder()
   const request = requestBuilder()
     .withUsername(TESTUSER.username)
     .withText('31')
-  const expectedMorningEntry = entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-31T09:00:00+01:00')
-  const expectedAfternoonEntry = entry(TESTUSER.project.id, TESTUSER.project.description, '2016-10-31T14:00:00+01:00')
+  const expectedMorningEntry = entry('2016-10-31T09:00:00+01:00')
+  const expectedAfternoonEntry = entry('2016-10-31T14:00:00+01:00')
   const bot = testableBotBuilder
     .withTodayDate('2016-11-02')
     .withAlreadySavedUsers([TESTUSER])
@@ -55,10 +76,10 @@ test('it works also between months', t => {
   })
 })
 
-function entry(pid, description, startTime) {
+function entry(startTime) {
   return {
-    pid: pid,
-    description: description,
+    pid: TESTUSER.project.id,
+    description: TESTUSER.project.description,
     created_with: 'TrackerBot',
     duration: 14400,
     billable: true,
