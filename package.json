@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "create": "claudia create --api-module bot --region us-east-1 --configure-slack-slash-command --policies policies",
+    "create": "claudia create --api-module bot --region eu-west-1 --configure-slack-slash-command --policies policies",
+    "destroy": "claudia destroy",
     "update": "claudia update",
     "test:offline": "ava test/offline",
     "test": "ava"
@@ -20,16 +21,16 @@
   },
   "homepage": "https://github.com/xpeppers/trackerbot#readme",
   "dependencies": {
-    "aws-sdk": "^2.6.7",
-    "claudia-bot-builder": "^2.0.0",
+    "aws-sdk": "^2.351.0",
+    "claudia-bot-builder": "^4.5.0",
     "moment": "^2.18.1",
-    "moment-timezone": "^0.5.13",
+    "moment-timezone": "^0.5.23",
     "toggl-api": "^1.0.1"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
-    "claudia": "^2.1.0",
-    "proxyquire": "^1.7.10",
-    "sinon": "^1.17.6"
+    "ava": "^0.25.0",
+    "claudia": "^5.1.2",
+    "proxyquire": "^2.1.0",
+    "sinon": "^7.1.1"
   }
 }
